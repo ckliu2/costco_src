@@ -1,0 +1,1 @@
+select * from  dbo.ERP_QuotedPrice where no='20160201001'

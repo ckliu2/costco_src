@@ -126,7 +126,7 @@
                             from the Hibernate mapping files">
 		<hbm2java output="${source.generated}" config="${basedir}/hbm2app.xml">
 			<fileset dir="${source.classes}">
-				<include name="**/ERP.hbm.xml" />			
+				<include name="**/Costco.hbm.xml" />			
 			</fileset>
 		</hbm2java>
 	</target>

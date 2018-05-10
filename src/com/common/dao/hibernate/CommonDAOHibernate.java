@@ -499,7 +499,7 @@ public class CommonDAOHibernate extends BaseDAOHibernate implements CommonDAO {
 
 		try {
 			Criteria c = getHibernateSession().createCriteria(com.common.value.Member.class);
-			c.add(Expression.eq("cellphone", loginId));
+			c.add(Expression.eq("no", loginId));
 			c.add(Expression.eq("password", pwd));
 			List result = c.list();
 			if (result.size() > 0)

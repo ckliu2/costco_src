@@ -324,26 +324,6 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 		this.submitChecking = submitChecking;
 	}
 
-	public List getSrctypeList() {
-		return getAppPropertyList("quotedprice.srctype");
-	}
-
-	public List getSpecificationList() {
-		return getAppPropertyList("customerPrice.unit");
-	}
-
-	public List getTextFontList() {
-		return getAppPropertyList("common.textFont");
-	}
-
-	public List getContactsList() {
-		return getAppPropertyList("member.contacts");
-	}
-	
-	public List getQaList() {
-		System.out.println("getQaList");
-		return getAppPropertyList("qa.type");
-	}
 
 	public List removeFromList(List mainLst, List subList) {
 		if (subList == null || mainLst == null)
@@ -372,68 +352,9 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 	}
 	
 
-	public List<AppProperty> getWidthUnitList() {
-		return super.getAppPropertyList("specification.width");
-	}
-
-	public List<AppProperty> getHeightUnitList() {
-		return super.getAppPropertyList("specification.height");
-	}
-
-	public List<AppProperty> getUnitNameList() {
-		return super.getAppPropertyList("specification.unitName");
-	}
-
-	public List<AppProperty> getTaxList() {
-		return super.getAppPropertyList("common.tax");
-	}
-
-	public List<AppProperty> getFilesrcList() {
-		return super.getAppPropertyList("common.filesrc");
-	}
-
-	public List<AppProperty> getPickList() {
-		return super.getAppPropertyList("common.pick");
-	}
-
-	public List<AppProperty> getProduceStatusList() {
-		return super.getAppPropertyList("produce.status");
-	}
-
-	public List<AppProperty> getCountryList() {
-		return super.getAppPropertyList("common.county");
-	}
 	
-	public List<AppProperty> getDeliveryMethodList() {
-		return super.getAppPropertyList("delivery.method");
-	}
-	
-	public List getQuotedPricePrint() {
-		return getAppPropertyList("quotedprice.print");
-	}
-	
-	public List getServiceMode() {
-		return getAppPropertyList("service.mode");
-	}
-	
-	public List getPriceTypeList() {
-		return getAppPropertyList("customerprice.type");
-	}
-
-	public List getCustomerPriceList() {
-		return getAppPropertyList("quotedPrice.customerprice");
-	}
-	
-	public List getDiscountList() {
-		return getAppPropertyList("quotedprice.discount");
-	}
-	
-	public List getHrefTarget() {
-		return getAppPropertyList("href.target");
-	}
-	
-	public List getCarouselTypes() {
-		return getAppPropertyList("carousel.type");
+	public List getBillboardSizes() {
+		return getAppPropertyList("billboard.size");
 	}
 	
 	

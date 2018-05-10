@@ -29,6 +29,8 @@ public class Member implements Serializable {
 	String password;
 
 	String email;
+	
+	String no;
 
 	/** nullable persistent field */
 	private Date lastModifiedDate;
@@ -336,5 +338,13 @@ public class Member implements Serializable {
 
 	public void setOfficePhone(String officePhone) {
 		this.officePhone = officePhone;
+	}
+	
+	public String getNo() {
+		return no;
+	}
+
+	public void setNo(String no) {
+		this.no = no;
 	}
 }

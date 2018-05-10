@@ -28,7 +28,7 @@ import com.common.web.*;
 public class LoginAction extends CommonActionSupport {
 	private static final long serialVersionUID = 100L;
 	private final Log log;
-	private String cellphone, password, msg;
+	private String no, password, msg;
 
 	public LoginAction() {
 		log = LogFactory.getLog(com.common.web.action.LoginAction.class);
@@ -56,12 +56,12 @@ public class LoginAction extends CommonActionSupport {
 	}
 
 	public String execute() {
-		if (cellphone == null || password == null) {
+		if (no == null || password == null) {
 			appendXworkParam("msg=2");
 			return INPUT;
 		}
-		System.out.println("cellphone="+cellphone+"---password="+password);
-		Member user = getGenericManager().getMemberByLoginIdAndPassword(cellphone, password);
+		System.out.println("no="+no+"---password="+password);
+		Member user = getGenericManager().getMemberByLoginIdAndPassword(no, password);
 		if (user == null) {
 			// 如果找不到這個user登入失敗
 			System.out.println("如果找不到這個user登入失敗");
@@ -74,12 +74,12 @@ public class LoginAction extends CommonActionSupport {
 		}
 	}
 
-	public String getCellphone() {
-		return cellphone;
+	public String getNo() {
+		return no;
 	}
 
-	public void setCellphone(String cellphone) {
-		this.cellphone = cellphone;
+	public void setNo(String no) {
+		this.no = no;
 	}
 
 	public String getMsg() {

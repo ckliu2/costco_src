@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="loginAction" class="com.common.web.action.LoginAction" singleton="false">
+        <property name="genericManager" ref="commonManager"/>
+    </bean>
+
+    <bean id="appPropertyAction" class="com.common.web.action.AppPropertyAction" singleton="false">
+        <property name="genericManager" ref="appPropertyManager"/>
+    </bean>
+
+<!-- ********************************************* -->
+
+    <bean id="billboardAction" class="com.costco.web.action.BillboardAction" singleton="false">
+        <property name="genericManager" ref="billboardManager"/>
+    </bean>
+
+    <bean id="rentAction" class="com.costco.web.action.RentAction" singleton="false">
+        <property name="genericManager" ref="rentManager"/>
+    </bean>
+
+    <bean id="storeAction" class="com.costco.web.action.StoreAction" singleton="false">
+        <property name="genericManager" ref="storeManager"/>
+    </bean>
+
+    <bean id="vendorAction" class="com.costco.web.action.VendorAction" singleton="false">
+        <property name="genericManager" ref="vendorManager"/>
+    </bean>
+

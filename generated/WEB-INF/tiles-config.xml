@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<tiles-definitions>
+    <definition name="default" path="/layout/template.jsp">
+        <put name="title" value="Information System"/>
+        <put name="menu" value="/layout/menu.jsp"/>
+    </definition>
+
+    <definition name="dataAccessFailure" extends="default">
+        <put name="title" value="Data Access Error"/>
+        <put name="content" value="/common/dataAccessFailure.jsp"/>
+    </definition>
+
+    <definition name="blank" extends="default">
+        <put name="title" value=""/>
+        <put name="content" value="/common/blank.jsp"/>
+    </definition>
+
+    <!-- 
+    ************************ 
+    * AppProperty 
+    ************************
+    -->
+    <definition name="appPropertyList" extends="default">
+        <put name="content" value="/common/appPropertyList.jsp"/>
+    </definition>
+
+    <definition name="appPropertyForm" extends="default">
+        <put name="content" value="/common/appPropertyForm.jsp"/>
+    </definition>
+
+<!-- ********************************************* -->
+
+    <!-- 
+    ************************ 
+    * Billboard 
+    ************************
+    -->
+    <definition name="billboardList" extends="default">
+        <put name="content" value="/billboardList.jsp"/>
+    </definition>
+
+    <definition name="billboardForm" extends="default">
+        <put name="content" value="/billboardForm.jsp"/>
+    </definition>
+
+    <!-- 
+    ************************ 
+    * Rent 
+    ************************
+    -->
+    <definition name="rentList" extends="default">
+        <put name="content" value="/rentList.jsp"/>
+    </definition>
+
+    <definition name="rentForm" extends="default">
+        <put name="content" value="/rentForm.jsp"/>
+    </definition>
+
+    <!-- 
+    ************************ 
+    * Store 
+    ************************
+    -->
+    <definition name="storeList" extends="default">
+        <put name="content" value="/storeList.jsp"/>
+    </definition>
+
+    <definition name="storeForm" extends="default">
+        <put name="content" value="/storeForm.jsp"/>
+    </definition>
+
+    <!-- 
+    ************************ 
+    * Vendor 
+    ************************
+    -->
+    <definition name="vendorList" extends="default">
+        <put name="content" value="/vendorList.jsp"/>
+    </definition>
+
+    <definition name="vendorForm" extends="default">
+        <put name="content" value="/vendorForm.jsp"/>
+    </definition>
+

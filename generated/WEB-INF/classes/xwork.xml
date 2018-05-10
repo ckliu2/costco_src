@@ -1,0 +1,182 @@
+<!DOCTYPE xwork PUBLIC
+    "-//OpenSymphony Group//XWork 1.1.1//EN"
+    "http://www.opensymphony.com/xwork/xwork-1.1.1.dtd">
+
+<xwork>
+    <include file="webwork-default.xml" />
+
+    <package name="default" extends="webwork-default">
+        <interceptors>
+            <interceptor-stack name="defaultStack">
+                <interceptor-ref name="exception" />
+                <interceptor-ref name="alias" />
+                <interceptor-ref name="servlet-config" />
+                <interceptor-ref name="prepare" />
+                <interceptor-ref name="i18n" />
+                <interceptor-ref name="chain" />
+                <interceptor-ref name="model-driven" />
+                <interceptor-ref name="fileUpload" />
+                <interceptor-ref name="static-params" />
+                <interceptor-ref name="params" />
+                <interceptor-ref name="conversionError" />
+                <interceptor-ref name="validation">
+                    <param name="excludeMethods">execute,delete,edit,list,copy</param>
+                </interceptor-ref>
+                <interceptor-ref name="workflow">
+                    <param name="excludeMethods">input,back</param>
+                </interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+        <global-results>
+            <result name="dataAccessFailure" type="tiles">dataAccessFailure</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping exception="org.springframework.dao.DataAccessException"
+                result="dataAccessFailure"/>
+        </global-exception-mappings>
+
+        <!-- Login -->
+        <action name="login" class="loginAction">
+            <result name="input">index.jsp</result>
+            <result name="success" type="tiles">blank</result>
+        </action>
+
+        <action name="logout" class="loginAction" method="logout">
+            <result name="success">index.jsp</result>
+            <result name="input">index.jsp</result>
+        </action>
+
+    <!-- AppProperty -->
+        <action name="appPropertyList" class="appPropertyAction" method="list">
+            <result name="success" type="tiles">appPropertyList</result>
+            <result name="input" type="tiles">appPropertyList</result>
+        </action>
+
+        <action name="editAppProperty" class="appPropertyAction" method="edit">
+            <result name="success" type="tiles">appPropertyForm</result>
+            <result name="input" type="tiles">appPropertyList</result>
+        </action>
+
+        <action name="saveAppProperty" class="appPropertyAction">
+            <result name="delete" type="redirect">appPropertyList.html</result>
+            <result name="input" type="tiles">appPropertyForm</result>
+            <result name="success" type="chain">saveAppPropertyWithValidation</result>
+        </action>
+
+        <action name="saveAppPropertyWithValidation" class="appPropertyAction" method="save">
+            <result name="input" type="tiles">appPropertyForm</result>
+            <result name="success">/common/backback.jsp</result>
+        </action>
+
+<!-- ********************************************* -->
+
+    <!-- Billboard -->
+        <action name="billboardList" class="billboardAction" method="list">
+            <result name="success" type="tiles">billboardList</result>
+            <result name="input" type="tiles">billboardList</result>
+        </action>
+
+        <action name="editBillboard" class="billboardAction" method="edit">
+            <result name="success" type="tiles">billboardForm</result>
+            <result name="input" type="tiles">billboardList</result>
+        </action>
+
+        <action name="copyBillboard" class="billboardAction" method="copy">
+            <result name="success" type="tiles">billboardForm</result>
+            <result name="input" type="tiles">billboardList</result>
+        </action>
+
+        <action name="saveBillboard" class="billboardAction">
+            <result name="delete" type="redirect">billboardList.html</result>
+            <result name="input" type="tiles">billboardForm</result>
+            <result name="success" type="chain">saveBillboardWithValidation</result>
+        </action>
+
+        <action name="saveBillboardWithValidation" class="billboardAction" method="save">
+            <result name="input" type="tiles">billboardForm</result>
+            <result name="success">/common/backback.jsp</result>
+        </action>
+
+    <!-- Rent -->
+        <action name="rentList" class="rentAction" method="list">
+            <result name="success" type="tiles">rentList</result>
+            <result name="input" type="tiles">rentList</result>
+        </action>
+
+        <action name="editRent" class="rentAction" method="edit">
+            <result name="success" type="tiles">rentForm</result>
+            <result name="input" type="tiles">rentList</result>
+        </action>
+
+        <action name="copyRent" class="rentAction" method="copy">
+            <result name="success" type="tiles">rentForm</result>
+            <result name="input" type="tiles">rentList</result>
+        </action>
+
+        <action name="saveRent" class="rentAction">
+            <result name="delete" type="redirect">rentList.html</result>
+            <result name="input" type="tiles">rentForm</result>
+            <result name="success" type="chain">saveRentWithValidation</result>
+        </action>
+
+        <action name="saveRentWithValidation" class="rentAction" method="save">
+            <result name="input" type="tiles">rentForm</result>
+            <result name="success">/common/backback.jsp</result>
+        </action>
+
+    <!-- Store -->
+        <action name="storeList" class="storeAction" method="list">
+            <result name="success" type="tiles">storeList</result>
+            <result name="input" type="tiles">storeList</result>
+        </action>
+
+        <action name="editStore" class="storeAction" method="edit">
+            <result name="success" type="tiles">storeForm</result>
+            <result name="input" type="tiles">storeList</result>
+        </action>
+
+        <action name="copyStore" class="storeAction" method="copy">
+            <result name="success" type="tiles">storeForm</result>
+            <result name="input" type="tiles">storeList</result>
+        </action>
+
+        <action name="saveStore" class="storeAction">
+            <result name="delete" type="redirect">storeList.html</result>
+            <result name="input" type="tiles">storeForm</result>
+            <result name="success" type="chain">saveStoreWithValidation</result>
+        </action>
+
+        <action name="saveStoreWithValidation" class="storeAction" method="save">
+            <result name="input" type="tiles">storeForm</result>
+            <result name="success">/common/backback.jsp</result>
+        </action>
+
+    <!-- Vendor -->
+        <action name="vendorList" class="vendorAction" method="list">
+            <result name="success" type="tiles">vendorList</result>
+            <result name="input" type="tiles">vendorList</result>
+        </action>
+
+        <action name="editVendor" class="vendorAction" method="edit">
+            <result name="success" type="tiles">vendorForm</result>
+            <result name="input" type="tiles">vendorList</result>
+        </action>
+
+        <action name="copyVendor" class="vendorAction" method="copy">
+            <result name="success" type="tiles">vendorForm</result>
+            <result name="input" type="tiles">vendorList</result>
+        </action>
+
+        <action name="saveVendor" class="vendorAction">
+            <result name="delete" type="redirect">vendorList.html</result>
+            <result name="input" type="tiles">vendorForm</result>
+            <result name="success" type="chain">saveVendorWithValidation</result>
+        </action>
+
+        <action name="saveVendorWithValidation" class="vendorAction" method="save">
+            <result name="input" type="tiles">vendorForm</result>
+            <result name="success">/common/backback.jsp</result>
+        </action>
+

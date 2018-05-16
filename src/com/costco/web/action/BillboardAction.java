@@ -20,6 +20,13 @@ public class BillboardAction extends CommonActionSupport
     private Long[] selectedBillboardIds;
     Store store;
 
+    private java.io.File fileLocation1;
+    private String fileLocation1ContentType, fileLocation1FileName, removeLocation1;
+    private java.io.File fileLocation2;
+    private String fileLocation2ContentType, fileLocation2FileName, removeLocation2;
+    private java.io.File fileLocation3;
+    private String fileLocation3ContentType, fileLocation3FileName, removeLocation3;
+
 	public BillboardAction()
     {
         log = LogFactory.getLog(com.costco.web.action.BillboardAction.class);
@@ -60,6 +67,10 @@ public class BillboardAction extends CommonActionSupport
     {
         if (billboard == null) {
             billboard = new Billboard();
+            try{
+            	billboard.setStoreId(store.getId());
+            	//billboard.setStore(getGenericManager().getStoreById(store.getId())); 
+            }catch(Exception e){}
         } else if (billboard.getId() != null) {
             billboard = getGenericManager().getBillboardById(billboard.getId());
         } else { // TODO
@@ -104,6 +115,10 @@ public class BillboardAction extends CommonActionSupport
         log.info("entering 'save' method");
         getGenericManager().saveBillboard(billboard);
         saveFileToLocal(fileCoverFileName, fileCover, getTextWithArgs("billboard.uploadCover.dir"), billboard.getId());
+        saveFileToLocal(fileLocation1FileName, fileLocation1, getTextWithArgs("billboard.uploadLocation1.dir"), billboard.getId());
+        saveFileToLocal(fileLocation2FileName, fileLocation2, getTextWithArgs("billboard.uploadLocation2.dir"), billboard.getId());
+        saveFileToLocal(fileLocation3FileName, fileLocation3, getTextWithArgs("billboard.uploadLocation3.dir"), billboard.getId());
+        appendXworkParam("store.id="+billboard.getStoreId());  
         return SUCCESS;
     }
 
@@ -131,8 +146,37 @@ public class BillboardAction extends CommonActionSupport
             else
                 billboard.setCover(computeUploadedFile(fileCoverFileName, fileCover)); 
         }
+        if (getRemoveLocation1() != null && getRemoveLocation1().length() > 0) {
+            billboard.setLocation1(computeUploadedFile(fileLocation1FileName, fileLocation1)); 
+            removeUploadedFile(getTextWithArgs("billboard.uploadLocation1.dir"), billboard.getLocation1Id(), billboard.getLocation1FileName());
+        } else {
+            if (billboard.getLocation1Id() != null)
+                billboard.setLocation1(getGenericManager().getUploadedFileById(billboard.getLocation1Id())); 
+            else
+                billboard.setLocation1(computeUploadedFile(fileLocation1FileName, fileLocation1)); 
+        }
+        if (getRemoveLocation2() != null && getRemoveLocation2().length() > 0) {
+            billboard.setLocation2(computeUploadedFile(fileLocation2FileName, fileLocation2)); 
+            removeUploadedFile(getTextWithArgs("billboard.uploadLocation2.dir"), billboard.getLocation2Id(), billboard.getLocation2FileName());
+        } else {
+            if (billboard.getLocation2Id() != null)
+                billboard.setLocation2(getGenericManager().getUploadedFileById(billboard.getLocation2Id())); 
+            else
+                billboard.setLocation2(computeUploadedFile(fileLocation2FileName, fileLocation2)); 
+        }
+        if (getRemoveLocation3() != null && getRemoveLocation3().length() > 0) {
+            billboard.setLocation3(computeUploadedFile(fileLocation3FileName, fileLocation3)); 
+            removeUploadedFile(getTextWithArgs("billboard.uploadLocation3.dir"), billboard.getLocation3Id(), billboard.getLocation3FileName());
+        } else {
+            if (billboard.getLocation3Id() != null)
+                billboard.setLocation3(getGenericManager().getUploadedFileById(billboard.getLocation3Id())); 
+            else
+                billboard.setLocation3(computeUploadedFile(fileLocation3FileName, fileLocation3)); 
+        }
         billboard.setStore(getGenericManager().getStoreById(billboard.getStoreId())); 
-        log.info("exit formToBean()");
+
+        
+        
     }
     
     public Store getStore() {
@@ -182,6 +226,126 @@ public class BillboardAction extends CommonActionSupport
     {
         return removeCover;
     }
+    
+    public void setFileLocation1(java.io.File val)
+    {
+        fileLocation1 = val;
+    }
+
+    public java.io.File getFileLocation1()
+    {
+        return fileLocation1;
+    }
+
+    public void setFileLocation1ContentType(String val)
+    {
+        fileLocation1ContentType = val;
+    }
+
+    public String getFileLocation1ContentType()
+    {
+        return fileLocation1ContentType;
+    }
+
+    public void setFileLocation1FileName(String val)
+    {
+        fileLocation1FileName = val;
+    }
+
+    public String getFileLocation1FileName()
+    {
+        return fileLocation1FileName;
+    }
+
+    public void setRemoveLocation1(String val)
+    {
+        removeLocation1 = val;
+    }
+
+    public String getRemoveLocation1()
+    {
+        return removeLocation1;
+    }
+
+    public void setFileLocation2(java.io.File val)
+    {
+        fileLocation2 = val;
+    }
+
+    public java.io.File getFileLocation2()
+    {
+        return fileLocation2;
+    }
+
+    public void setFileLocation2ContentType(String val)
+    {
+        fileLocation2ContentType = val;
+    }
+
+    public String getFileLocation2ContentType()
+    {
+        return fileLocation2ContentType;
+    }
+
+    public void setFileLocation2FileName(String val)
+    {
+        fileLocation2FileName = val;
+    }
+
+    public String getFileLocation2FileName()
+    {
+        return fileLocation2FileName;
+    }
+
+    public void setRemoveLocation2(String val)
+    {
+        removeLocation2 = val;
+    }
+
+    public String getRemoveLocation2()
+    {
+        return removeLocation2;
+    }
+
+    public void setFileLocation3(java.io.File val)
+    {
+        fileLocation3 = val;
+    }
+
+    public java.io.File getFileLocation3()
+    {
+        return fileLocation3;
+    }
+
+    public void setFileLocation3ContentType(String val)
+    {
+        fileLocation3ContentType = val;
+    }
+
+    public String getFileLocation3ContentType()
+    {
+        return fileLocation3ContentType;
+    }
+
+    public void setFileLocation3FileName(String val)
+    {
+        fileLocation3FileName = val;
+    }
+
+    public String getFileLocation3FileName()
+    {
+        return fileLocation3FileName;
+    }
+
+    public void setRemoveLocation3(String val)
+    {
+        removeLocation3 = val;
+    }
+
+    public String getRemoveLocation3()
+    {
+        return removeLocation3;
+    }
 
     public List<Store> getStoreList()
     {
@@ -190,7 +354,9 @@ public class BillboardAction extends CommonActionSupport
 
     public List<Billboard> getBillboardList()
     {
+    	try{
     	store = getGenericManager().getStoreById(store.getId());
+    	}catch(Exception e){}
         return getGenericManager().getBillboardList(store);
     }
 

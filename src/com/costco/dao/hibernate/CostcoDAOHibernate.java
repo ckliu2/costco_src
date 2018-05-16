@@ -48,7 +48,7 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 	}
 
 	public List<Store> findAllStore() {
-		return getHibernateTemplate().find("from Store");
+		return getHibernateTemplate().find("from Store order by name");
 	}
 
 	// Billboard
@@ -111,12 +111,17 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 			return obj;
 	}
 
-	public List<Rent> findAllRent(int year, Store store) {
+	public List<Rent> findAllRent(int year, Store store, boolean havaPhoto) {
 		Criteria c = getHibernateSession().createCriteria(Rent.class);
 		c.createCriteria("billboard", "b");
 		c.add(Expression.eq("year", year));
 		if (store != null) {
 			c.add(Expression.eq("b.store", store));
+		}
+		if(havaPhoto){
+			c.add(Restrictions.isNotNull("photo"));
+		}else{
+			c.add(Restrictions.isNull("photo"));
 		}
 		return c.list();
 	}

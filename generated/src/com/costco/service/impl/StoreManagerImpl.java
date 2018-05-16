@@ -10,7 +10,7 @@ import com.common.service.impl.CommonManagerImpl;
  WebWork Application Generator V 1.0
 
     Copyright 2006 Chih-Shyang Chang
-    Created Date: Mon May 07 22:10:24 CST 2018
+    Created Date: Mon May 14 20:54:08 CST 2018
 */
 
 public class StoreManagerImpl extends CommonManagerImpl implements StoreManager

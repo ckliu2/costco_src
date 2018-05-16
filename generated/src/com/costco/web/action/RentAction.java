@@ -13,7 +13,7 @@ import com.base.value.Function;
  WebWork Application Generator V 1.0
 
     Copyright 2006 Chih-Shyang Chang
-    Created Date: Mon May 07 22:10:24 CST 2018
+    Created Date: Mon May 14 20:54:08 CST 2018
 */
 
 public class RentAction extends CommonActionSupport
@@ -22,6 +22,8 @@ public class RentAction extends CommonActionSupport
     private static final long serialVersionUID = 1L;
     private final Log log;
     private Rent rent;
+    private java.io.File filePhoto;
+    private String filePhotoContentType, filePhotoFileName, removePhoto;
     private java.io.File fileCover;
     private String fileCoverContentType, fileCoverFileName, removeCover;
     private Long[] selectedRentIds;
@@ -116,6 +118,7 @@ public class RentAction extends CommonActionSupport
         rent.setLastModifiedDate(ts);
         rent.setLastModifiedUser(getSessionUser().getLoginId());
         getGenericManager().saveRent(rent);
+        saveFileToLocal(filePhotoFileName, filePhoto, getTextWithArgs("rent.uploadPhoto.dir"), rent.getId());
         saveFileToLocal(fileCoverFileName, fileCover, getTextWithArgs("rent.uploadCover.dir"), rent.getId());
         return SUCCESS;
     }
@@ -136,6 +139,15 @@ public class RentAction extends CommonActionSupport
         log.info("enter formToBean()");
         rent.setBillboard(getGenericManager().getBillboardById(rent.getBillboardId())); 
         rent.setVendor(getGenericManager().getVendorById(rent.getVendorId())); 
+        if (getRemovePhoto() != null && getRemovePhoto().length() > 0) {
+            rent.setPhoto(computeUploadedFile(filePhotoFileName, filePhoto)); 
+            removeUploadedFile(getTextWithArgs("rent.uploadPhoto.dir"), rent.getPhotoId(), rent.getPhotoFileName());
+        } else {
+            if (rent.getPhotoId() != null)
+                rent.setPhoto(getGenericManager().getUploadedFileById(rent.getPhotoId())); 
+            else
+                rent.setPhoto(computeUploadedFile(filePhotoFileName, filePhoto)); 
+        }
         if (getRemoveCover() != null && getRemoveCover().length() > 0) {
             rent.setCover(computeUploadedFile(fileCoverFileName, fileCover)); 
             removeUploadedFile(getTextWithArgs("rent.uploadCover.dir"), rent.getCoverId(), rent.getCoverFileName());
@@ -155,6 +167,46 @@ public class RentAction extends CommonActionSupport
     public List<Vendor> getVendorList()
     {
         return getGenericManager().getVendorList(); // TODO
+    }
+
+    public void setFilePhoto(java.io.File val)
+    {
+        filePhoto = val;
+    }
+
+    public java.io.File getFilePhoto()
+    {
+        return filePhoto;
+    }
+
+    public void setFilePhotoContentType(String val)
+    {
+        filePhotoContentType = val;
+    }
+
+    public String getFilePhotoContentType()
+    {
+        return filePhotoContentType;
+    }
+
+    public void setFilePhotoFileName(String val)
+    {
+        filePhotoFileName = val;
+    }
+
+    public String getFilePhotoFileName()
+    {
+        return filePhotoFileName;
+    }
+
+    public void setRemovePhoto(String val)
+    {
+        removePhoto = val;
+    }
+
+    public String getRemovePhoto()
+    {
+        return removePhoto;
     }
 
     public void setFileCover(java.io.File val)

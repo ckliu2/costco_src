@@ -47,6 +47,11 @@ public class Rent extends BaseObject implements Serializable {
     /** persistent field */
     private Member createdUser;
     private Long createdUserId;
+    
+    /** nullable persistent field */
+    private UploadedFile photo;
+    private String photoFileName;
+    private Long photoId;
 
     /** full constructor */
     public Rent(Integer year, Boolean isUpToDate, Date lastModifiedDate, Date createdDate, com.costco.value.Billboard billboard, com.costco.value.Vendor vendor, UploadedFile cover, Member lastModifiedUser, Member createdUser) {
@@ -210,6 +215,33 @@ public class Rent extends BaseObject implements Serializable {
     public void setCreatedUserId(Long id) {
         this.createdUserId = id;
     }
+    
+    public UploadedFile getPhoto() {
+        return this.photo;
+    }
+
+    public void setPhoto(UploadedFile photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoFileName() {
+        return this.photoFileName;
+    }
+
+    public void setPhotoFileName(String val) {
+        this.photoFileName = val;
+    }
+
+    public Long getPhotoId() {
+        if (this.photo != null && this.photo.getId() != null)
+            return photo.getId();
+        return this.photoId;
+    }
+
+    public void setPhotoId(Long id) {
+        this.photoId = id;
+    }
+
 
     public String toString() {
         return new ToStringBuilder(this)

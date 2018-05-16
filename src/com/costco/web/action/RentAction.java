@@ -16,9 +16,12 @@ public class RentAction extends CommonActionSupport {
 	private Rent rent;
 	private java.io.File fileCover;
 	private String fileCoverContentType, fileCoverFileName, removeCover;
+	private java.io.File filePhoto;
+	private String filePhotoContentType, filePhotoFileName, removePhoto;
 	private Long[] selectedRentIds;
 	int year;
 	Store store;
+	boolean havaPhoto;
 
 	public RentAction() {
 		log = LogFactory.getLog(com.costco.web.action.RentAction.class);
@@ -99,18 +102,10 @@ public class RentAction extends CommonActionSupport {
 		rent.setLastModifiedUser(getSessionUser().getMember());
 		getGenericManager().saveRent(rent);
 		saveFileToLocal(fileCoverFileName, fileCover, getTextWithArgs("rent.uploadCover.dir"), rent.getId());
-		
-		appendXworkParam("year="+rent.getYear());
-		appendXworkParam("store.id="+rent.getBillboard().getStoreId());
+		saveFileToLocal(filePhotoFileName, filePhoto, getTextWithArgs("rent.uploadPhoto.dir"), rent.getId());
+		appendXworkParam("year=" + rent.getYear());
+		appendXworkParam("store.id=" + rent.getBillboard().getStoreId());
 
-		/*
-		// 更新最新看板照片
-		if (rent.getIsUpToDate()) {
-			Billboard billboard = rent.getBillboard();
-			billboard.setCover(rent.getCover());
-			getGenericManager().saveBillboard(billboard);
-		}
-		*/
 		return SUCCESS;
 	}
 
@@ -128,7 +123,6 @@ public class RentAction extends CommonActionSupport {
 		log.info("enter formToBean()");
 		rent.setBillboard(getGenericManager().getBillboardById(rent.getBillboardId()));
 		rent.setVendor(getGenericManager().getVendorById(rent.getVendorId()));
-
 		if (getRemoveCover() != null && getRemoveCover().length() > 0) {
 			rent.setCover(computeUploadedFile(fileCoverFileName, fileCover));
 			removeUploadedFile(getTextWithArgs("rent.uploadCover.dir"), rent.getCoverId(), rent.getCoverFileName());
@@ -138,8 +132,15 @@ public class RentAction extends CommonActionSupport {
 			else
 				rent.setCover(computeUploadedFile(fileCoverFileName, fileCover));
 		}
-
-		log.info("exit formToBean()");
+		if (getRemovePhoto() != null && getRemovePhoto().length() > 0) {
+			rent.setPhoto(computeUploadedFile(filePhotoFileName, filePhoto));
+			removeUploadedFile(getTextWithArgs("rent.uploadPhoto.dir"), rent.getPhotoId(), rent.getPhotoFileName());
+		} else {
+			if (rent.getPhotoId() != null)
+				rent.setPhoto(getGenericManager().getUploadedFileById(rent.getPhotoId()));
+			else
+				rent.setPhoto(computeUploadedFile(filePhotoFileName, filePhoto));
+		}
 	}
 
 	public List<Billboard> getBillboardList() {
@@ -148,6 +149,14 @@ public class RentAction extends CommonActionSupport {
 
 	public List<Vendor> getVendorList() {
 		return getGenericManager().getVendorList(); // TODO
+	}
+
+	public boolean isHavaPhoto() {
+		return havaPhoto;
+	}
+
+	public void setHavaPhoto(boolean havaPhoto) {
+		this.havaPhoto = havaPhoto;
 	}
 
 	public int getYear() {
@@ -165,7 +174,7 @@ public class RentAction extends CommonActionSupport {
 	public void setStore(Store store) {
 		this.store = store;
 	}
-	
+
 	public void setFileCover(java.io.File val) {
 		fileCover = val;
 	}
@@ -197,15 +206,50 @@ public class RentAction extends CommonActionSupport {
 	public String getRemoveCover() {
 		return removeCover;
 	}
-	
-	public List<Store> getStoreList()
-    {
-        return getGenericManager().getStoreList(); // TODO
-    }
+
+	public void setFilePhoto(java.io.File val) {
+		filePhoto = val;
+	}
+
+	public java.io.File getFilePhoto() {
+		return filePhoto;
+	}
+
+	public void setFilePhotoContentType(String val) {
+		filePhotoContentType = val;
+	}
+
+	public String getFilePhotoContentType() {
+		return filePhotoContentType;
+	}
+
+	public void setFilePhotoFileName(String val) {
+		filePhotoFileName = val;
+	}
+
+	public String getFilePhotoFileName() {
+		return filePhotoFileName;
+	}
+
+	public void setRemovePhoto(String val) {
+		removePhoto = val;
+	}
+
+	public String getRemovePhoto() {
+		return removePhoto;
+	}
+
+	public List<Store> getStoreList() {
+		return getGenericManager().getStoreList(); // TODO
+	}
 
 	public List<Rent> getRentList() {
-		store = getGenericManager().getStoreById(store.getId());
-		return getGenericManager().getRentList(year,store);
+		System.out.println("havaPhoto=" + havaPhoto);
+		try {
+			store = getGenericManager().getStoreById(store.getId());
+		} catch (Exception e) {
+		}
+		return getGenericManager().getRentList(year, store, havaPhoto);
 	}
 
 	public void setSelectedRentIds(Long[] val) {

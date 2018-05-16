@@ -12,6 +12,26 @@
             <message key="errors.numericRequired"></message>
         </field-validator>
     </field>
+    <field name="billboard.width">
+        <field-validator type="required">
+            <message key="errors.required"></message>
+        </field-validator>
+    </field>
+    <field name="billboard.width">
+        <field-validator type="int">
+            <message key="errors.numericRequired"></message>
+        </field-validator>
+    </field>
+    <field name="billboard.height">
+        <field-validator type="required">
+            <message key="errors.required"></message>
+        </field-validator>
+    </field>
+    <field name="billboard.height">
+        <field-validator type="int">
+            <message key="errors.numericRequired"></message>
+        </field-validator>
+    </field>
     <field name="billboard.sizeId">
         <field-validator type="required">
             <message key="errors.required"></message>

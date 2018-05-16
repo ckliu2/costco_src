@@ -8,7 +8,7 @@ import com.common.dao.CommonDAO;
  WebWork Application Generator V 1.0
 
     Copyright 2006 Chih-Shyang Chang
-    Created Date: Mon May 07 22:10:24 CST 2018
+    Created Date: Mon May 14 20:54:08 CST 2018
 */
 
 public interface RentDAO extends CommonDAO 
@@ -24,6 +24,7 @@ public interface RentDAO extends CommonDAO
     public abstract List<Rent> findAllRent();
     public abstract List<Billboard> findBillboardList();
     public abstract List<Vendor> findVendorList();
+    public abstract List<UploadedFile> findPhotoList();
     public abstract List<UploadedFile> findCoverList();
     public abstract List<Member> findLastModifiedUserList();
     public abstract List<Member> findCreatedUserList();

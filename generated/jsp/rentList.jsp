@@ -31,6 +31,7 @@
     <display:column property="createdDate" sortable="true" titleKey="common.createdDate" style="text-align:left"/>
     <display:column property="billboard.caption_" sortable="true" titleKey="rent.billboard" style="text-align:left"/>
     <display:column property="vendor.caption_" sortable="true" titleKey="rent.vendor" style="text-align:left"/>
+    <display:column property="photo.caption_" sortable="true" titleKey="rent.photo" style="text-align:left"/>
     <display:column property="cover.caption_" sortable="true" titleKey="rent.cover" style="text-align:left"/>
     <display:column property="lastModifiedUser" sortable="true" titleKey="common.lastModifiedUser" style="text-align:left"/>
     <display:column property="createdUser" sortable="true" titleKey="common.createdUser" style="text-align:left"/>

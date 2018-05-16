@@ -10,7 +10,7 @@ import com.common.service.impl.CommonManagerImpl;
  WebWork Application Generator V 1.0
 
     Copyright 2006 Chih-Shyang Chang
-    Created Date: Mon May 07 22:10:24 CST 2018
+    Created Date: Mon May 14 20:54:08 CST 2018
 */
 
 public class BillboardManagerImpl extends CommonManagerImpl implements BillboardManager
@@ -62,6 +62,21 @@ public class BillboardManagerImpl extends CommonManagerImpl implements Billboard
     public List<Store> getStoreList()
     {
         return getGenericDAO().findStoreList();
+    }
+
+    public List<UploadedFile> getLocation1List()
+    {
+        return getGenericDAO().findLocation1List();
+    }
+
+    public List<UploadedFile> getLocation2List()
+    {
+        return getGenericDAO().findLocation2List();
+    }
+
+    public List<UploadedFile> getLocation3List()
+    {
+        return getGenericDAO().findLocation3List();
     }
 
 }

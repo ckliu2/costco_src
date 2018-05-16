@@ -27,9 +27,14 @@
         <input type="checkbox" id="selectedBillboardId_<c:out value="${count}"/>" name="selectedBillboardId" value="<c:out value="${row.id}"/>">
     </display:column>
     <display:column property="no" sortable="true" titleKey="billboard.no" />
+    <display:column property="width" sortable="true" titleKey="billboard.width" />
+    <display:column property="height" sortable="true" titleKey="billboard.height" />
     <display:column property="size.caption_" sortable="true" titleKey="billboard.size" style="text-align:left"/>
     <display:column property="cover.caption_" sortable="true" titleKey="billboard.cover" style="text-align:left"/>
     <display:column property="store.caption_" sortable="true" titleKey="billboard.store" style="text-align:left"/>
+    <display:column property="location1.caption_" sortable="true" titleKey="billboard.location1" style="text-align:left"/>
+    <display:column property="location2.caption_" sortable="true" titleKey="billboard.location2" style="text-align:left"/>
+    <display:column property="location3.caption_" sortable="true" titleKey="billboard.location3" style="text-align:left"/>
     <display:column titleKey="common.action">
         <ww:if test="recordEditable == true">
             <a href="editBillboard.html?billboard.id=<c:out value="${row.id}"/>"><fmt:message key="common.edit"/></a>&nbsp;&nbsp;

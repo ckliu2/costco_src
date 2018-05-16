@@ -10,7 +10,7 @@ import com.common.dao.hibernate.CommonDAOHibernate;
  WebWork Application Generator V 1.0
 
     Copyright 2006 Chih-Shyang Chang
-    Created Date: Mon May 07 22:10:24 CST 2018
+    Created Date: Mon May 14 20:54:08 CST 2018
 */
 
 public class BillboardDAOHibernate extends CommonDAOHibernate implements BillboardDAO
@@ -59,6 +59,21 @@ public class BillboardDAOHibernate extends CommonDAOHibernate implements Billboa
     public List<Store> findStoreList()
     {
         return new ArrayList<Store>(); // TODO
+    }
+
+    public List<UploadedFile> findLocation1List()
+    {
+        return new ArrayList<UploadedFile>(); // TODO
+    }
+
+    public List<UploadedFile> findLocation2List()
+    {
+        return new ArrayList<UploadedFile>(); // TODO
+    }
+
+    public List<UploadedFile> findLocation3List()
+    {
+        return new ArrayList<UploadedFile>(); // TODO
     }
 
 }

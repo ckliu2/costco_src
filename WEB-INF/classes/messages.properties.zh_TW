@@ -299,10 +299,24 @@ menu.billboardList=看板清單
 menu.billboardForm=看板明細
 billboard.no=看板編號
 billboard.size=看板尺寸
+billboard.sizeId=看板尺寸
 billboard.uploadCover.dir={0}/upload/billboard
 billboard.uploadCover.relativeUrl=upload/billboard
 billboard.cover=看板照片
 billboard.store=店名
+billboard.width=寬cm
+billboard.height=高cm
+
+billboard.uploadLocation1.dir={0}/upload/billboard
+billboard.uploadLocation1.relativeUrl=upload/billboard
+billboard.location1=看板位置1
+billboard.uploadLocation2.dir={0}/upload/billboard
+billboard.uploadLocation2.relativeUrl=upload/billboard
+billboard.location2=看板位置2
+billboard.uploadLocation3.dir={0}/upload/billboard
+billboard.uploadLocation3.relativeUrl=upload/billboard
+billboard.location3=看板位置3
+
 
 rent.list=出租清單
 rent.form=出租明細
@@ -314,7 +328,11 @@ rent.billboard=看板
 rent.vendor=出租廠商
 rent.uploadCover.dir={0}/upload/rent
 rent.uploadCover.relativeUrl=upload/rent
-rent.cover=照片
+rent.cover=完工照
+
+rent.photo=換檔圖
+rent.uploadPhoto.dir={0}/upload/rent
+rent.uploadPhoto.relativeUrl=upload/rent
 
 
 store.list=分店清單

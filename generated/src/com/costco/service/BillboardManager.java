@@ -8,7 +8,7 @@ import com.common.service.CommonManager;
  WebWork Application Generator V 1.0
 
     Copyright 2006 Chih-Shyang Chang
-    Created Date: Mon May 07 22:10:24 CST 2018
+    Created Date: Mon May 14 20:54:08 CST 2018
 */
 
 public interface BillboardManager extends CommonManager 
@@ -24,5 +24,8 @@ public interface BillboardManager extends CommonManager
     public abstract List<Billboard> getBillboardList();
     public abstract List<UploadedFile> getCoverList();
     public abstract List<Store> getStoreList();
+    public abstract List<UploadedFile> getLocation1List();
+    public abstract List<UploadedFile> getLocation2List();
+    public abstract List<UploadedFile> getLocation3List();
 }
 

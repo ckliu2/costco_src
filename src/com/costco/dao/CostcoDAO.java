@@ -5,7 +5,7 @@ import java.util.*;
 import com.common.dao.CommonDAO;
 
 public interface CostcoDAO extends CommonDAO {
-	
+
 	// Store
 	public abstract void saveStore(Store val);
 
@@ -27,7 +27,7 @@ public interface CostcoDAO extends CommonDAO {
 	public abstract Billboard findBillboardById(Long id);
 
 	public abstract List<Billboard> findAllBillboard(Store store);
-	
+
 	public abstract List<Billboard> findAllBillboard();
 
 	// Vendor
@@ -50,5 +50,5 @@ public interface CostcoDAO extends CommonDAO {
 
 	public abstract Rent findRentById(Long id);
 
-	public abstract List<Rent> findAllRent(int year,Store store);
+	public abstract List<Rent> findAllRent(int year, Store store, boolean havaPhoto);
 }

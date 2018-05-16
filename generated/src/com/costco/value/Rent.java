@@ -33,6 +33,11 @@ public class Rent extends BaseObject implements Serializable {
     private Long vendorId;
 
     /** nullable persistent field */
+    private UploadedFile photo;
+    private String photoFileName;
+    private Long photoId;
+
+    /** nullable persistent field */
     private UploadedFile cover;
     private String coverFileName;
     private Long coverId;
@@ -46,13 +51,14 @@ public class Rent extends BaseObject implements Serializable {
     private Long createdUserId;
 
     /** full constructor */
-    public Rent(Integer year, Boolean isUpToDate, Date lastModifiedDate, Date createdDate, com.costco.value.Billboard billboard, com.costco.value.Vendor vendor, UploadedFile cover, Member lastModifiedUser, Member createdUser) {
+    public Rent(Integer year, Boolean isUpToDate, Date lastModifiedDate, Date createdDate, com.costco.value.Billboard billboard, com.costco.value.Vendor vendor, UploadedFile photo, UploadedFile cover, Member lastModifiedUser, Member createdUser) {
         this.year = year;
         this.isUpToDate = isUpToDate;
         this.lastModifiedDate = lastModifiedDate;
         this.createdDate = createdDate;
         this.billboard = billboard;
         this.vendor = vendor;
+        this.photo = photo;
         this.cover = cover;
         this.lastModifiedUser = lastModifiedUser;
         this.createdUser = createdUser;
@@ -138,6 +144,32 @@ public class Rent extends BaseObject implements Serializable {
         this.vendorId = id;
     }
 
+    public UploadedFile getPhoto() {
+        return this.photo;
+    }
+
+    public void setPhoto(UploadedFile photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoFileName() {
+        return this.photoFileName;
+    }
+
+    public void setPhotoFileName(String val) {
+        this.photoFileName = val;
+    }
+
+    public Long getPhotoId() {
+        if (this.photo != null && this.photo.getId() != null)
+            return photo.getId();
+        return this.photoId;
+    }
+
+    public void setPhotoId(Long id) {
+        this.photoId = id;
+    }
+
     public UploadedFile getCover() {
         return this.cover;
     }
@@ -208,6 +240,7 @@ public class Rent extends BaseObject implements Serializable {
             .append("createdDate", getCreatedDate())
             .append("billboard", getBillboard())
             .append("vendor", getVendor())
+            .append("photo", getPhoto())
             .append("cover", getCover())
             .append("lastModifiedUser", getLastModifiedUser())
             .append("createdUser", getCreatedUser())

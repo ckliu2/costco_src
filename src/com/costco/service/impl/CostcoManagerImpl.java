@@ -6,133 +6,106 @@ import com.costco.value.*;
 import java.util.*;
 import com.common.service.impl.CommonManagerImpl;
 
+public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManager {
 
-public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManager
-{
+	public CostcoManagerImpl() {
+	}
 
-    public CostcoManagerImpl()
-    {
-    }
+	public CostcoDAO getGenericDAO() {
+		return (CostcoDAO) super.getGenericDAO();
+	}
 
-    public CostcoDAO getGenericDAO()
-    {
-        return (CostcoDAO)super.getGenericDAO();
-    }
+	public void setGenericDAO(CostcoDAO dao) {
+		super.setGenericDAO(dao);
+	}
 
-    public void setGenericDAO(CostcoDAO dao)
-    {
-        super.setGenericDAO(dao);
-    }
+	// Store
 
-    //Store
-    
-    public void saveStore(Store val)
-    {
-        getGenericDAO().saveStore(val);
-    }
+	public void saveStore(Store val) {
+		getGenericDAO().saveStore(val);
+	}
 
-    public void removeStore(Store val)
-    {
-        getGenericDAO().removeStore(val);
-    }
+	public void removeStore(Store val) {
+		getGenericDAO().removeStore(val);
+	}
 
-    public void removeStore(Long id)
-    {
-        getGenericDAO().removeStore(id);
-    }
+	public void removeStore(Long id) {
+		getGenericDAO().removeStore(id);
+	}
 
-    public Store getStoreById(Long id)
-    {
-         return getGenericDAO().findStoreById(id);
-    }
+	public Store getStoreById(Long id) {
+		return getGenericDAO().findStoreById(id);
+	}
 
-    public List<Store> getStoreList()
-    {
-        return getGenericDAO().findAllStore();
-    }
-    
-    //Billboard
-    public void saveBillboard(Billboard val)
-    {
-        getGenericDAO().saveBillboard(val);
-    }
+	public List<Store> getStoreList() {
+		return getGenericDAO().findAllStore();
+	}
 
-    public void removeBillboard(Billboard val)
-    {
-        getGenericDAO().removeBillboard(val);
-    }
+	// Billboard
+	public void saveBillboard(Billboard val) {
+		getGenericDAO().saveBillboard(val);
+	}
 
-    public void removeBillboard(Long id)
-    {
-        getGenericDAO().removeBillboard(id);
-    }
+	public void removeBillboard(Billboard val) {
+		getGenericDAO().removeBillboard(val);
+	}
 
-    public Billboard getBillboardById(Long id)
-    {
-         return getGenericDAO().findBillboardById(id);
-    }
+	public void removeBillboard(Long id) {
+		getGenericDAO().removeBillboard(id);
+	}
 
-    public List<Billboard> getBillboardList(Store store)
-    {
-        return getGenericDAO().findAllBillboard(store);
-    }
-    
-    public List<Billboard> getBillboardList()
-    {
-        return getGenericDAO().findAllBillboard();
-    }
-    
-    //Rent
-    public void saveRent(Rent val)
-    {
-        getGenericDAO().saveRent(val);
-    }
+	public Billboard getBillboardById(Long id) {
+		return getGenericDAO().findBillboardById(id);
+	}
 
-    public void removeRent(Rent val)
-    {
-        getGenericDAO().removeRent(val);
-    }
+	public List<Billboard> getBillboardList(Store store) {
+		return getGenericDAO().findAllBillboard(store);
+	}
 
-    public void removeRent(Long id)
-    {
-        getGenericDAO().removeRent(id);
-    }
+	public List<Billboard> getBillboardList() {
+		return getGenericDAO().findAllBillboard();
+	}
 
-    public Rent getRentById(Long id)
-    {
-         return getGenericDAO().findRentById(id);
-    }
+	// Rent
+	public void saveRent(Rent val) {
+		getGenericDAO().saveRent(val);
+	}
 
-    public List<Rent> getRentList(int year,Store store)
-    {
-        return getGenericDAO().findAllRent(year,store);
-    }
-    
-    //Vendor
-    public void saveVendor(Vendor val)
-    {
-        getGenericDAO().saveVendor(val);
-    }
+	public void removeRent(Rent val) {
+		getGenericDAO().removeRent(val);
+	}
 
-    public void removeVendor(Vendor val)
-    {
-        getGenericDAO().removeVendor(val);
-    }
+	public void removeRent(Long id) {
+		getGenericDAO().removeRent(id);
+	}
 
-    public void removeVendor(Long id)
-    {
-        getGenericDAO().removeVendor(id);
-    }
+	public Rent getRentById(Long id) {
+		return getGenericDAO().findRentById(id);
+	}
 
-    public Vendor getVendorById(Long id)
-    {
-         return getGenericDAO().findVendorById(id);
-    }
+	public List<Rent> getRentList(int year, Store store, boolean havaPhoto) {
+		return getGenericDAO().findAllRent(year, store, havaPhoto);
+	}
 
-    public List<Vendor> getVendorList()
-    {
-        return getGenericDAO().findAllVendor();
-    }
-    
+	// Vendor
+	public void saveVendor(Vendor val) {
+		getGenericDAO().saveVendor(val);
+	}
+
+	public void removeVendor(Vendor val) {
+		getGenericDAO().removeVendor(val);
+	}
+
+	public void removeVendor(Long id) {
+		getGenericDAO().removeVendor(id);
+	}
+
+	public Vendor getVendorById(Long id) {
+		return getGenericDAO().findVendorById(id);
+	}
+
+	public List<Vendor> getVendorList() {
+		return getGenericDAO().findAllVendor();
+	}
+
 }
-

@@ -13,7 +13,7 @@ import com.base.value.Function;
  WebWork Application Generator V 1.0
 
     Copyright 2006 Chih-Shyang Chang
-    Created Date: Mon May 14 20:54:08 CST 2018
+    Created Date: Sat Jun 08 17:31:21 CST 2019
 */
 
 public class StoreAction extends CommonActionSupport

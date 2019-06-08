@@ -6,8 +6,8 @@
 	<!-- 
 	compile,properties,xml,obfuscator
 	-->
-	<property name="workspace" location="C:/Java/WebApp" />
-	<property name="tomcat" location="C:/Java/Tomcat" />
+	<property name="workspace" location="C:/chongkai/workspace" />
+	<property name="tomcat" location="C:/chongkai/tomcat7" />
 	<property name="webapps" location="${tomcat}/webapps" />
 	<property name="deploy" location="${webapps}/costco" />
 	<property name="input" location="${basedir}" />

@@ -31,6 +31,13 @@
     <display:column property="contact" sortable="true" titleKey="store.contact" style="text-align:left" />
     <display:column property="title" sortable="true" titleKey="store.title" style="text-align:left" />
     <display:column property="phone" sortable="true" titleKey="store.phone" style="text-align:left" />
+    <display:column property="no" sortable="true" titleKey="store.no" style="text-align:left" />
+    <display:column property="deptNo" sortable="true" titleKey="store.deptNo" style="text-align:left" />
+    <display:column property="product1" sortable="true" titleKey="store.product1" style="text-align:left" />
+    <display:column property="product2" sortable="true" titleKey="store.product2" style="text-align:left" />
+    <display:column property="product3" sortable="true" titleKey="store.product3" style="text-align:left" />
+    <display:column property="product4" sortable="true" titleKey="store.product4" style="text-align:left" />
+    <display:column property="product5" sortable="true" titleKey="store.product5" style="text-align:left" />
     <display:column property="lastModifiedDate" sortable="true" titleKey="common.lastModifiedDate" style="text-align:left"/>
     <display:column property="createdDate" sortable="true" titleKey="common.createdDate" style="text-align:left"/>
     <display:column titleKey="common.action">

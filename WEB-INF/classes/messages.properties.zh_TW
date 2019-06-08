@@ -344,6 +344,13 @@ store.address=地址
 store.contact=聯絡人
 store.title=職稱
 store.phone=電話
+store.no=廠商編號
+store.deptNo=部門編號
+store.product1=產品名稱1
+store.product2=產品名稱2
+store.product3=產品名稱3
+store.product4=產品名稱4
+store.product5=產品名稱5
 
 vendor.list=廠商清單
 vendor.form=廠商明細

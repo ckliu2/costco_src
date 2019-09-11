@@ -33,6 +33,27 @@ public class Vendor extends BaseObject implements Serializable {
 
     /** nullable persistent field */
     private Date createdDate;
+    
+    /** nullable persistent field */
+    private String no;
+
+    /** nullable persistent field */
+    private String deptNo;
+
+    /** nullable persistent field */
+    private String product1;
+
+    /** nullable persistent field */
+    private String product2;
+
+    /** nullable persistent field */
+    private String product3;
+
+    /** nullable persistent field */
+    private String product4;
+
+    /** nullable persistent field */
+    private String product5;
 
     /** full constructor */
     public Vendor(String name, String address, String contact, String title, String phone, Date lastModifiedDate, Date createdDate) {
@@ -116,6 +137,62 @@ public class Vendor extends BaseObject implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+    
+    public String getNo() {
+        return this.no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
+
+    public String getDeptNo() {
+        return this.deptNo;
+    }
+
+    public void setDeptNo(String deptNo) {
+        this.deptNo = deptNo;
+    }
+
+    public String getProduct1() {
+        return this.product1;
+    }
+
+    public void setProduct1(String product1) {
+        this.product1 = product1;
+    }
+
+    public String getProduct2() {
+        return this.product2;
+    }
+
+    public void setProduct2(String product2) {
+        this.product2 = product2;
+    }
+
+    public String getProduct3() {
+        return this.product3;
+    }
+
+    public void setProduct3(String product3) {
+        this.product3 = product3;
+    }
+
+    public String getProduct4() {
+        return this.product4;
+    }
+
+    public void setProduct4(String product4) {
+        this.product4 = product4;
+    }
+
+    public String getProduct5() {
+        return this.product5;
+    }
+
+    public void setProduct5(String product5) {
+        this.product5 = product5;
     }
 
     public String toString() {

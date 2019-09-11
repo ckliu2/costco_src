@@ -306,6 +306,7 @@ billboard.cover=看板照片
 billboard.store=店名
 billboard.width=寬cm
 billboard.height=高cm
+billboard.costcoId=好市多編號
 
 billboard.uploadLocation1.dir={0}/upload/billboard
 billboard.uploadLocation1.relativeUrl=upload/billboard
@@ -329,7 +330,7 @@ rent.vendor=出租廠商
 rent.uploadCover.dir={0}/upload/rent
 rent.uploadCover.relativeUrl=upload/rent
 rent.cover=完工照
-
+rent.screen=畫面
 rent.photo=換檔圖
 rent.uploadPhoto.dir={0}/upload/rent
 rent.uploadPhoto.relativeUrl=upload/rent
@@ -344,13 +345,7 @@ store.address=地址
 store.contact=聯絡人
 store.title=職稱
 store.phone=電話
-store.no=廠商編號
-store.deptNo=部門編號
-store.product1=產品名稱1
-store.product2=產品名稱2
-store.product3=產品名稱3
-store.product4=產品名稱4
-store.product5=產品名稱5
+
 
 vendor.list=廠商清單
 vendor.form=廠商明細
@@ -361,4 +356,12 @@ vendor.address=地址
 vendor.contact=聯絡人
 vendor.title=職稱
 vendor.phone=電話
+
+vendor.no=廠商編號
+vendor.deptNo=部門編號
+vendor.product1=產品名稱1
+vendor.product2=產品名稱2
+vendor.product3=產品名稱3
+vendor.product4=產品名稱4
+vendor.product5=產品名稱5
 

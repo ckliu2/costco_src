@@ -8,6 +8,7 @@ import java.util.*;
 import com.common.web.action.CommonActionSupport;
 import com.base.util.Tools;
 import com.base.value.*;
+import org.json.*;
 
 public class VendorAction extends CommonActionSupport
 {
@@ -16,6 +17,8 @@ public class VendorAction extends CommonActionSupport
     private final Log log;
     private Vendor vendor;
     private Long[] selectedVendorIds;
+	
+   
 
     public VendorAction()
     {
@@ -37,6 +40,8 @@ public class VendorAction extends CommonActionSupport
         vendor = val;
     }
 
+   
+	
     public void setGenericManager(CostcoManager m)
     {
         super.setGenericManager(m);
@@ -138,4 +143,25 @@ public class VendorAction extends CommonActionSupport
     {
         return selectedVendorIds;
     }
+   
+    public String vendorJSON() {
+		System.out.println("vendorJSON");
+		JSONArray ja = new JSONArray();
+		try {
+			
+
+			List<Vendor> ls = getGenericManager().getVendorList();
+			for (Vendor vendor : ls) {
+				JSONObject jo = new JSONObject();
+				jo.put("value", vendor.getId());
+				jo.put("text", vendor.getName());
+				ja.put(jo);
+			}
+		} catch (Exception e) {
+			System.out.println("vendorJSON=" + e.toString());
+		}
+		return ja.toString();
+	}
+    
+    
 }

@@ -2,6 +2,8 @@ package com.costco.dao;
 
 import com.costco.value.*;
 import java.util.*;
+
+import com.base.value.AppProperty;
 import com.common.dao.CommonDAO;
 
 public interface CostcoDAO extends CommonDAO {
@@ -29,6 +31,9 @@ public interface CostcoDAO extends CommonDAO {
 	public abstract List<Billboard> findAllBillboard(Store store);
 
 	public abstract List<Billboard> findAllBillboard();
+	
+	public abstract List<Billboard> findAllBillboard(Store store,AppProperty size);
+	
 
 	// Vendor
 	public abstract void saveVendor(Vendor val);
@@ -49,6 +54,12 @@ public interface CostcoDAO extends CommonDAO {
 	public abstract void removeRent(Long id);
 
 	public abstract Rent findRentById(Long id);
+	
+	public abstract Rent findRentById(int year, Store store,int no);
 
-	public abstract List<Rent> findAllRent(int year, Store store, boolean havaPhoto);
+	public abstract List<Rent> findAllRent(int year, Store store, Vendor vendor, boolean havaPhoto);
+	
+	public abstract List<Rent> findSameSizeAllRent(Rent rent);
+	
+	public abstract List<Rent> findSameSizeOrderAllRent(Rent rent);
 }

@@ -2,6 +2,8 @@ package com.costco.service;
 
 import com.costco.value.*;
 import java.util.*;
+
+import com.base.value.AppProperty;
 import com.common.service.CommonManager;
 
 public interface CostcoManager extends CommonManager {
@@ -28,6 +30,8 @@ public interface CostcoManager extends CommonManager {
 	public abstract List<Billboard> getBillboardList(Store store);
 
 	public abstract List<Billboard> getBillboardList();
+	
+	public abstract List<Billboard> getBillboardList(Store store,AppProperty size);
 
 	// Rent
 	public abstract void saveRent(Rent val);
@@ -37,8 +41,14 @@ public interface CostcoManager extends CommonManager {
 	public abstract void removeRent(Long id);
 
 	public abstract Rent getRentById(Long id);
+	
+	public abstract Rent getRentById(int year, Store store,int no);
 
-	public abstract List<Rent> getRentList(int year, Store store, boolean havaPhoto);
+	public abstract List<Rent> getRentList(int year, Store store, Vendor vendor, boolean havaPhoto);
+	
+	public abstract List<Rent> getSameSizeRentList(Rent rent);
+	
+	public abstract List<Rent> getSameSizeRentOrderList(Rent rent);
 
 	// Vendor
 	public abstract void saveVendor(Vendor val);

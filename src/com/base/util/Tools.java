@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -169,14 +170,14 @@ public class Tools {
 		return null;
 	}
 
-	public static Calendar[] getDateOffset(java.util.Date d,int offset) {
-		Calendar[] ls = new Calendar[offset];		
-		for(int i=0;i<offset;i++){
+	public static Calendar[] getDateOffset(java.util.Date d, int offset) {
+		Calendar[] ls = new Calendar[offset];
+		for (int i = 0; i < offset; i++) {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(d);
 			cal.add(Calendar.DATE, -i);
-			ls[i]=cal;
-		}		
+			ls[i] = cal;
+		}
 		return ls;
 	}
 
@@ -375,6 +376,13 @@ public class Tools {
 		cal.setTime(date);
 		cal.add(Calendar.MINUTE, mins);
 		return cal;
+	}
+
+	public static int thisYear() {
+		Date date = new Date();
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		return calendar.get(Calendar.YEAR);
 	}
 
 	private static String buildDestinationZipFilePath(File srcFile, String destParam) {
@@ -602,24 +610,24 @@ public class Tools {
 		}
 		return false;
 	}
-	
+
 	public static void copyFileUsingStream(File source, File dest) throws IOException {
-	    InputStream is = null;
-	    OutputStream os = null;
-	    try {
-	        is = new FileInputStream(source);
-	        os = new FileOutputStream(dest);
-	        byte[] buffer = new byte[1024];
-	        int length;
-	        while ((length = is.read(buffer)) > 0) {
-	            os.write(buffer, 0, length);
-	        }
-	    } catch(Exception e){
-	    	System.out.println("copyFileUsingStream err="+e.toString());
-	    }finally {
-	        is.close();
-	        os.close();
-	    }
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			is = new FileInputStream(source);
+			os = new FileOutputStream(dest);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+		} catch (Exception e) {
+			System.out.println("copyFileUsingStream err=" + e.toString());
+		} finally {
+			is.close();
+			os.close();
+		}
 	}
 
 }

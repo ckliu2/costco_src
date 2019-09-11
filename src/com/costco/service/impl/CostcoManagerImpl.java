@@ -4,6 +4,8 @@ import com.costco.service.CostcoManager;
 import com.costco.dao.CostcoDAO;
 import com.costco.value.*;
 import java.util.*;
+
+import com.base.value.AppProperty;
 import com.common.service.impl.CommonManagerImpl;
 
 public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManager {
@@ -65,6 +67,11 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 	public List<Billboard> getBillboardList() {
 		return getGenericDAO().findAllBillboard();
 	}
+	
+	public List<Billboard> getBillboardList(Store store,AppProperty size) {
+		return getGenericDAO().findAllBillboard(store,size);
+	}
+	
 
 	// Rent
 	public void saveRent(Rent val) {
@@ -82,9 +89,22 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 	public Rent getRentById(Long id) {
 		return getGenericDAO().findRentById(id);
 	}
+	
+	public Rent getRentById(int year, Store store,int no){
+		return getGenericDAO().findRentById(year,store,no);
+	}
 
-	public List<Rent> getRentList(int year, Store store, boolean havaPhoto) {
-		return getGenericDAO().findAllRent(year, store, havaPhoto);
+	public List<Rent> getRentList(int year, Store store, Vendor vendor, boolean havaPhoto) {
+		return getGenericDAO().findAllRent(year, store, vendor, havaPhoto);
+	}
+	
+	public List<Rent> getSameSizeRentList(Rent rent){
+		return getGenericDAO().findSameSizeAllRent(rent);
+	}
+	
+	
+	public List<Rent> getSameSizeRentOrderList(Rent rent){
+		return getGenericDAO().findSameSizeOrderAllRent(rent);
 	}
 
 	// Vendor

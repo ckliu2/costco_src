@@ -52,8 +52,10 @@ public class Rent extends BaseObject implements Serializable {
     private UploadedFile photo;
     private String photoFileName;
     private Long photoId;
+    
+    String screen,yearCode;
 
-    /** full constructor */
+	/** full constructor */
     public Rent(Integer year, Boolean isUpToDate, Date lastModifiedDate, Date createdDate, com.costco.value.Billboard billboard, com.costco.value.Vendor vendor, UploadedFile cover, Member lastModifiedUser, Member createdUser) {
         this.year = year;
         this.isUpToDate = isUpToDate;
@@ -242,7 +244,28 @@ public class Rent extends BaseObject implements Serializable {
         this.photoId = id;
     }
 
+    public String getScreen() {
+		return screen;
+	}
 
+	public void setScreen(String screen) {
+		this.screen = screen;
+	}
+	
+	public String getYearCode() {
+		String y="";
+		
+		try{
+			String year=String.valueOf(getYear());
+			y="FY"+year.substring(2,4);
+		}catch(Exception e){}
+		return y; 
+	}
+
+	public void setYearCode(String yearCode) {
+		this.yearCode = yearCode;
+	}
+	
     public String toString() {
         return new ToStringBuilder(this)
             .append("year", getYear())

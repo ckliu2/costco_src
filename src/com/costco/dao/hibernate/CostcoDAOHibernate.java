@@ -16,6 +16,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.ObjectRetrievalFailureException;
 
+import com.base.value.AppProperty;
 import com.common.dao.hibernate.CommonDAOHibernate;
 
 public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO {
@@ -86,6 +87,15 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 	public List<Billboard> findAllBillboard() {
 		return getHibernateTemplate().find("from Billboard");
 	}
+	
+	public List<Billboard> findAllBillboard(Store store,AppProperty size) {
+		Criteria c = getHibernateSession().createCriteria(Billboard.class);
+		c.add(Expression.eq("store", store));
+		c.add(Expression.eq("size", size));
+		c.addOrder(Order.asc("no"));
+		return c.list();
+	}
+	
 
 	// Rent
 	public void saveRent(Rent val) {
@@ -111,18 +121,73 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 			return obj;
 	}
 
-	public List<Rent> findAllRent(int year, Store store, boolean havaPhoto) {
+	public Rent findRentById(int year, Store store, int no) {
 		Criteria c = getHibernateSession().createCriteria(Rent.class);
 		c.createCriteria("billboard", "b");
+		c.add(Expression.eq("b.store", store));
+		c.add(Expression.eq("b.no", no));
 		c.add(Expression.eq("year", year));
+		List ls = c.list();
+		if (ls.size() > 0) {
+			return (Rent) ls.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public List<Rent> findAllRent(int year, Store store, Vendor vendor, boolean havaPhoto) {
+		Criteria c = getHibernateSession().createCriteria(Rent.class);
+		c.createCriteria("billboard", "b");
+
+		Integer[] years = new Integer[2];
+		years[0] = year;
+		years[1] = year - 1;
+		c.add(Restrictions.in("year", years));
+		// c.add(Restrictions.in("year", new Integer[]{2019,2018}));
+
+		c.addOrder(Order.asc("b.store"));
+		c.addOrder(Order.asc("b.no"));
+
 		if (store != null) {
 			c.add(Expression.eq("b.store", store));
 		}
-		if(havaPhoto){
+		if (vendor != null) {
+			c.add(Expression.eq("vendor", vendor));
+		}
+		if (havaPhoto) {
 			c.add(Restrictions.isNotNull("photo"));
-		}else{
+		} else {
 			c.add(Restrictions.isNull("photo"));
 		}
+		return c.list();
+	}
+
+	public List<Rent> findSameSizeAllRent(Rent rent) {
+		Criteria c = getHibernateSession().createCriteria(Rent.class);
+		c.createCriteria("billboard", "b");
+		
+		Integer[] years = new Integer[2];
+		years[0] = rent.getYear();
+		years[1] = rent.getYear() - 1;
+		c.add(Restrictions.in("year", years));
+
+		//c.add(Restrictions.not(Expression.eq("year", rent.getYear() + 1)));
+
+		c.add(Restrictions.not(Expression.eq("b.no", rent.getBillboard().getNo())));
+
+		c.add(Expression.eq("b.store", rent.getBillboard().getStore()));
+		c.add(Expression.eq("b.size", rent.getBillboard().getSize()));
+		c.addOrder(Order.asc("b.no"));
+		return c.list();
+	}
+	
+	public List<Rent> findSameSizeOrderAllRent(Rent rent) {
+		Criteria c = getHibernateSession().createCriteria(Rent.class);
+		c.createCriteria("billboard", "b");
+		c.add(Expression.eq("year", rent.getYear()+1));
+		c.add(Expression.eq("b.store", rent.getBillboard().getStore()));
+		c.add(Expression.eq("b.size", rent.getBillboard().getSize()));
+		c.addOrder(Order.asc("b.no"));
 		return c.list();
 	}
 

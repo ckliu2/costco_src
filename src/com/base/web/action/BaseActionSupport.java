@@ -507,6 +507,13 @@ public abstract class BaseActionSupport extends ActionSupport {
 		al.add(new NameValue(Constant.SEX_LIST_FEMALE, getText("common.female")));
 		return al;
 	}
+	
+	public List getCostcoYearList() {
+		ArrayList al = new ArrayList();
+		al.add(new NameValue(2019, "FY19"));
+		al.add(new NameValue(2020, "FY20"));
+		return al;
+	}
 
 	public List getLanguageList() {
 		return getAppPropertyList("common.languages");

@@ -46,8 +46,10 @@ public class Billboard extends BaseObject implements Serializable {
     private UploadedFile location3;
     private String location3FileName;
     private Long location3Id;
+    
+    String costcoId;
 
-    /** full constructor */
+	/** full constructor */
     public Billboard(Integer no, AppProperty size, UploadedFile cover, com.costco.value.Store store) {
         this.no = no;
         this.size = size;
@@ -238,7 +240,14 @@ public class Billboard extends BaseObject implements Serializable {
         this.location3Id = id;
     }
 
+    public String getCostcoId() {
+		return costcoId;
+	}
 
+	public void setCostcoId(String costcoId) {
+		this.costcoId = costcoId;
+	}
+	
     public String toString() {
         return new ToStringBuilder(this)
             .append("no", getNo())

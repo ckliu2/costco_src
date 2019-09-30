@@ -16,17 +16,20 @@ public class RentAction extends CommonActionSupport {
 
 	private static final long serialVersionUID = 1L;
 	private final Log log;
-	private Rent rent,rent1;
+	private Rent rent, rent1;
 	private java.io.File fileCover;
 	private String fileCoverContentType, fileCoverFileName, removeCover;
 	private java.io.File filePhoto;
 	private String filePhotoContentType, filePhotoFileName, removePhoto;
 	private Long[] selectedRentIds;
-	int year;
+	int year, code;
+	String fmYear;
 	Store store;
 	Vendor vendor;
 	Billboard billboard;
 	boolean havaPhoto;
+	AppProperty kind;
+	String assign;
 
 	public RentAction() {
 		log = LogFactory.getLog(com.costco.web.action.RentAction.class);
@@ -43,7 +46,7 @@ public class RentAction extends CommonActionSupport {
 	public void setRent(Rent val) {
 		rent = val;
 	}
-	
+
 	public Rent getRent1() {
 		return rent1;
 	}
@@ -51,7 +54,31 @@ public class RentAction extends CommonActionSupport {
 	public void setRent1(Rent rent1) {
 		this.rent1 = rent1;
 	}
-	
+
+	public String getAssign() {
+		return assign;
+	}
+
+	public void setAssign(String assign) {
+		this.assign = assign;
+	}
+
+	public AppProperty getKind() {
+		return kind;
+	}
+
+	public void setKind(AppProperty kind) {
+		this.kind = kind;
+	}
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
 	public Billboard getBillboard() {
 		return billboard;
 	}
@@ -66,6 +93,14 @@ public class RentAction extends CommonActionSupport {
 
 	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
+	}
+
+	public String getFmYear() {
+		return fmYear;
+	}
+
+	public void setFmYear(String fmYear) {
+		this.fmYear = fmYear;
 	}
 
 	public void setGenericManager(CostcoManager m) {
@@ -139,12 +174,10 @@ public class RentAction extends CommonActionSupport {
 	}
 
 	public String list() {
-		if (year == 0) {
-			Date date = new Date();
-			Calendar calendar = new GregorianCalendar();
-			calendar.setTime(date);
-			year = calendar.get(Calendar.YEAR);
+		if (fmYear == null) {
+			fmYear = getCostcoThisYear();
 		}
+		System.out.println("fmYear=" + fmYear);
 		return SUCCESS;
 	}
 
@@ -288,7 +321,7 @@ public class RentAction extends CommonActionSupport {
 			store = getGenericManager().getStoreById(store.getId());
 		} catch (Exception e) {
 		}
-		return getGenericManager().getRentList(year, store, vendor, havaPhoto);
+		return getGenericManager().getRentList(fmYear, store, vendor, havaPhoto);
 	}
 
 	public void setSelectedRentIds(Long[] val) {
@@ -298,12 +331,24 @@ public class RentAction extends CommonActionSupport {
 	public Long[] getSelectedRentIds() {
 		return selectedRentIds;
 	}
-	
-	
-	
+
+	public String deleteRentJSON() throws Exception {
+		JSONObject obj = new JSONObject();
+		System.out.println("deleteRentJSON rent.getId()=" + rent.getId());
+		try {
+			rent = getGenericManager().getRentById(rent.getId());
+			getGenericManager().removeRent(rent);
+			obj.put("result", true);
+		} catch (Exception e) {
+			System.out.println("deleteRentJSON error=" + e.toString());
+			obj.put("result", false);
+		}
+		return obj.toString();
+	}
+
 	public String saveNewRentJSON() {
 		JSONObject renewAdd = new JSONObject();
-		System.out.println("saveNewRentJSON billboard.getId()="+billboard.getId()+"  vendor.getId()="+vendor.getId());
+		System.out.println("saveNewRentJSON billboard.getId()=" + billboard.getId() + "  vendor.getId()=" + vendor.getId());
 		try {
 			billboard = getGenericManager().getBillboardById(billboard.getId());
 			vendor = getGenericManager().getVendorById(vendor.getId());
@@ -314,6 +359,11 @@ public class RentAction extends CommonActionSupport {
 			newRent.setScreen(rent.getScreen());
 			newRent.setCreatedUser(getSessionUser().getMember());
 			newRent.setCreatedDate(Tools.getCurrentTimestamp());
+			newRent.setFmYear(Tools.getCostcoYearFormat(Tools.thisYear() + 1));
+
+			AppProperty kindItem = getGenericManager().getAppPropertyByCode("rent.type.2");
+			newRent.setKind(kindItem);
+
 			getGenericManager().saveRent(newRent);
 
 		} catch (Exception e) {
@@ -335,7 +385,8 @@ public class RentAction extends CommonActionSupport {
 				items.add(r.getBillboard().getNo());
 			}
 
-			//System.out.println("nextYearList.size=" + nextYearList.size());
+			System.out.println("nextYearList.size=" + nextYearList.size());
+			System.out.println("ls.size=" + ls.size());
 
 			JSONArray ja = new JSONArray();
 
@@ -347,14 +398,16 @@ public class RentAction extends CommonActionSupport {
 					jo.put("vendor", rent.getVendor().getName());
 					jo.put("vendorDeptNo", rent.getVendor().getDeptNo());
 					jo.put("vendorNo", rent.getVendor().getNo());
-					jo.put("year", String.format("FY%s", String.valueOf(rent.getYear()).substring(2, 4)));
+					jo.put("year", rent.getYear());
+					jo.put("fmYear", rent.getFmYear());
 					jo.put("store", rent.getBillboard().getStore().getName());
 					jo.put("rentNo", rent.getBillboard().getNo());
 					jo.put("size", String.format("%s (%sX%s)", rent.getBillboard().getSize().getValueTw(), rent.getBillboard().getWidth(), rent.getBillboard().getHeight()));
 					jo.put("screen", rent.getScreen());
+					jo.put("kind", rent.getKind() != null ? rent.getKind().getValueTw() : "");
 
 					boolean r = items.contains(rent.getBillboard().getNo());
-					if(!r){
+					if (!r) {
 						ja.put(jo);
 					}
 				} catch (Exception ex) {
@@ -383,8 +436,8 @@ public class RentAction extends CommonActionSupport {
 			} catch (Exception e) {
 			}
 
-			List<Rent> ls = getGenericManager().getRentList(year, store, vendor, havaPhoto);
-			System.out.println("year=" + year);
+			List<Rent> ls = getGenericManager().getRentList(fmYear, store, vendor, havaPhoto);
+			System.out.println("fmYear=" + fmYear);
 			System.out.println("ls.size=" + ls.size());
 
 			JSONArray ja = new JSONArray();
@@ -397,11 +450,19 @@ public class RentAction extends CommonActionSupport {
 					jo.put("vendor", rent.getVendor().getName());
 					jo.put("vendorDeptNo", rent.getVendor().getDeptNo());
 					jo.put("vendorNo", rent.getVendor().getNo());
-					jo.put("year", String.format("FY%s", String.valueOf(rent.getYear()).substring(2, 4)));
+					jo.put("year", rent.getYear());
+					jo.put("fmYear", rent.getFmYear());
 					jo.put("store", rent.getBillboard().getStore().getName());
 					jo.put("rentNo", rent.getBillboard().getNo());
-					jo.put("size", String.format("%s (%sX%s)", rent.getBillboard().getSize().getValueTw(), rent.getBillboard().getWidth(), rent.getBillboard().getHeight()));
+					jo.put("size", rent.getBillboard().getSize().getValueTw());
+					jo.put("size1", rent.getBillboard().getSize().getCode1());
+					jo.put("size2", rent.getBillboard().getSize().getCode2());
+					jo.put("size3", rent.getBillboard().getSize().getCode3());
+					jo.put("size4", rent.getBillboard().getSize().getCode4());
 					jo.put("screen", rent.getScreen());
+					jo.put("kind", rent.getKind() != null ? rent.getKind().getValueTw() : "");
+					jo.put("memo", rent.getMemo());
+					jo.put("assign", rent.getAssign() != null ? rent.getAssign() ? "Y" : "" : "");
 					ja.put(jo);
 				} catch (Exception ex) {
 					System.out.println("rentListJSON error=" + ex.toString());
@@ -415,22 +476,31 @@ public class RentAction extends CommonActionSupport {
 		}
 		return mainObj.toString();
 	}
-	
-	
+
 	public String renewAddJSON() {
 		JSONObject renewAdd = new JSONObject();
 		System.out.println("renewAddJSON");
 		try {
 			rent = getGenericManager().getRentById(rent.getId());
-			System.out.println("rent.id=" + rent.getId() + "--rent.year=" + rent.getYear());
+			System.out.println("rent.id=" + rent.getId() + "--rent.year=" + rent.getYear() + "--kind.code=" + kind.getCode());
 
 			Rent newRent = new Rent();
-			newRent.setYear(Tools.thisYear() + 1);
+
 			newRent.setBillboard(rent.getBillboard());
 			newRent.setScreen(rent.getScreen());
 			newRent.setVendor(rent.getVendor());
 			newRent.setCreatedUser(getSessionUser().getMember());
 			newRent.setCreatedDate(Tools.getCurrentTimestamp());
+			AppProperty kindItem = getGenericManager().getAppPropertyByCode(kind.getCode());
+			newRent.setKind(kindItem);
+
+			if (kind.getCode().equals("rent.type.1")) {
+				newRent.setYear(Tools.thisYear());
+			} else {
+				newRent.setYear(Tools.thisYear() + 1);
+			}
+
+			newRent.setFmYear(getCostcoYearFormat(Tools.thisYear() + 1));
 			getGenericManager().saveRent(newRent);
 
 		} catch (Exception e) {
@@ -439,13 +509,33 @@ public class RentAction extends CommonActionSupport {
 		return renewAdd.toString();
 	}
 
+	public String editRentJSON() {
+		JSONObject jo = new JSONObject();
+		System.out.println("editRentJSON");
+		try {
+			rent = getGenericManager().getRentById(rent.getId());
+			jo.put("store", rent.getBillboard().getStoreId());
+			jo.put("size", rent.getBillboard().getSizeId());
+			jo.put("no", rent.getBillboard().getId());
+			jo.put("memo", rent.getMemo());
+			jo.put("screen", rent.getScreen());
+			jo.put("assign", rent.getAssign());
+			jo.put("vendor", rent.getVendorId());
+			jo.put("kind", rent.getKindId());
+			jo.put("year", rent.getYear());
+		} catch (Exception e) {
+			System.out.println("editRentJSON error=" + e.toString());
+		}
+		return jo.toString();
+	}
+
 	public String changeRentAddJSON() {
 		JSONObject renewAdd = new JSONObject();
 		System.out.println("changeRentAddJSON");
 		try {
 			rent = getGenericManager().getRentById(rent.getId());
 			rent1 = getGenericManager().getRentById(rent1.getId());
-			System.out.println("rent.id=" + rent.getId() + "--rent.year=" + rent.getYear());
+			System.out.println("rent.id=" + rent.getId() + "--rent.year=" + rent.getYear() + "--kind.code=" + kind.getCode());
 
 			Rent newRent = new Rent();
 			newRent.setYear(Tools.thisYear() + 1);
@@ -454,6 +544,10 @@ public class RentAction extends CommonActionSupport {
 			newRent.setVendor(rent1.getVendor());
 			newRent.setCreatedUser(getSessionUser().getMember());
 			newRent.setCreatedDate(Tools.getCurrentTimestamp());
+			newRent.setFmYear(Tools.getCostcoYearFormat(Tools.thisYear() + 1));
+			AppProperty kindItem = getGenericManager().getAppPropertyByCode(kind.getCode());
+			newRent.setKind(kindItem);
+
 			getGenericManager().saveRent(newRent);
 
 		} catch (Exception e) {
@@ -470,35 +564,39 @@ public class RentAction extends CommonActionSupport {
 			System.out.println("rent.id=" + rent.getId() + "--rent.year=" + rent.getYear());
 
 			int thisyear = Tools.thisYear();
-			String nextYear = String.format("FY%s", String.valueOf(thisyear + 1).substring(2, 4));
 
-			if (thisyear - 1 == rent.getYear()) {
-				renew.put("result", false);
-				renew.put("code", -1);
+			String nextYear = getCostcoYearFormat(thisyear + 1);
 
+			Rent rentOther = getGenericManager().getRentById(nextYear, rent.getBillboard().getStore(), rent.getBillboard().getNo());
+
+			System.out.println("nextYear=" + nextYear);
+			System.out.println("rentOther " + rentOther == null);
+			System.out.println("Billboard.id " + rent.getBillboard().getId());
+
+			if (rentOther == null) {
+				System.out.println("1");
+				renew.put("result", true);
+				renew.put("code", 0);
+				renew.put("year", nextYear);
+				renew.put("vendor", rent.getVendor().getName());
+				renew.put("deptNo", rent.getVendor().getDeptNo());
+				renew.put("store", rent.getBillboard().getStore().getName());
+				renew.put("size", rent.getBillboard().getSize().getValueTw());
+				renew.put("no", rent.getBillboard().getNo());
+				renew.put("screen", rent.getScreen());
+				renew.put("renew", thisyear - 1 != rent.getYear());
 			} else {
-				Rent rentOther = getGenericManager().getRentById(thisyear + 1, rent.getBillboard().getStore(), rent.getBillboard().getNo());
-				if (rentOther == null) {
-					renew.put("result", true);
-					renew.put("code", 0);
-					renew.put("year", nextYear);
-					renew.put("vendor", rent.getVendor().getName());
-					renew.put("deptNo", rent.getVendor().getDeptNo());
-					renew.put("store", rent.getBillboard().getStore().getName());
-					renew.put("size", rent.getBillboard().getSize().getValueTw());
-					renew.put("no", rent.getBillboard().getNo());
-					renew.put("screen", rent.getScreen());
-				} else {
-					renew.put("result", false);
-					renew.put("code", -2);
-					renew.put("year", nextYear);
-					renew.put("vendor", rentOther.getVendor().getName());
-					renew.put("deptNo", rentOther.getVendor().getDeptNo());
-					renew.put("store", rentOther.getBillboard().getStore().getName());
-					renew.put("size", rentOther.getBillboard().getSize().getValueTw());
-					renew.put("no", rentOther.getBillboard().getNo());
-					renew.put("screen", rentOther.getScreen());
-				}
+				System.out.println("2");
+				renew.put("result", false);
+				renew.put("code", -2);
+				renew.put("year", nextYear);
+				renew.put("vendor", rentOther.getVendor().getName());
+				renew.put("deptNo", rentOther.getVendor().getDeptNo());
+				renew.put("store", rentOther.getBillboard().getStore().getName());
+				renew.put("size", rentOther.getBillboard().getSize().getValueTw());
+				renew.put("no", rentOther.getBillboard().getNo());
+				renew.put("screen", rentOther.getScreen());
+				renew.put("renew", thisyear - 1 != rent.getYear());
 			}
 
 		} catch (Exception e) {
@@ -506,4 +604,124 @@ public class RentAction extends CommonActionSupport {
 		}
 		return renew.toString();
 	}
+
+	public String checkRentJSON() {
+		JSONObject mainObj = new JSONObject();
+		try {
+			store = getGenericManager().getStoreById(store.getId());
+			billboard = getGenericManager().getBillboardByStoreAndNo(store, billboard.getNo());
+			rent = getGenericManager().getRentById(Tools.getCostcoYearFormat(Tools.thisYear() + 1), billboard.getStore(), billboard.getNo());
+			mainObj.put("result", rent != null);
+		} catch (Exception e) {
+			System.out.println("checkRentJSON error=" + e.toString());
+		}
+		return mainObj.toString();
+	}
+
+	public String saveRentJSON() {
+		JSONObject mainObj = new JSONObject();
+		try {
+			store = getGenericManager().getStoreById(store.getId());
+			billboard = getGenericManager().getBillboardById(billboard.getId());
+			Rent rent1 = getGenericManager().getRentById(Tools.getCostcoYearFormat(Tools.thisYear() + 1), billboard.getStore(), billboard.getNo());
+			vendor = getGenericManager().getVendorById(vendor.getId());
+			Rent thisRent = getGenericManager().getRentById(rent.getId());
+
+			if (rent1 != null && thisRent == null) {
+				mainObj.put("result", -1);
+				return mainObj.toString();
+			}
+
+			if (rent1 != null && thisRent != null) {
+				if (rent1.getBillboardId() == billboard.getId() && rent1.getId() != thisRent.getId()) {
+					mainObj.put("result", -1);
+					return mainObj.toString();
+				}
+			}
+
+			if (thisRent == null) {
+				System.out.println("saveRentJSON create");
+				Rent r = new Rent();
+				r.setMemo(rent.getMemo());
+				r.setScreen(rent.getScreen());
+				r.setAssign(assign.equals("true"));
+				r.setBillboard(billboard);
+				r.setVendor(vendor);
+				r.setCreatedDate(Tools.getCurrentTimestamp());
+				
+				r.setCreatedUser(getGenericManager().getMemberById(2L));
+				r.setCreatedUser(getSessionUser().getMember());
+				r.setFmYear(Tools.getCostcoYearFormat(Tools.thisYear() + 1));
+				r.setKind(getGenericManager().getAppPropertyById(kind.getId()));
+				r.setYear(rent.getYear());
+				r.setIsUpToDate(false);
+				getGenericManager().saveRent(r);
+				mainObj.put("result", 0);
+			} else {
+				System.out.println("saveRentJSON edit");
+				thisRent.setMemo(rent.getMemo());
+				thisRent.setScreen(rent.getScreen());
+				thisRent.setAssign(assign.equals("true"));
+				thisRent.setBillboard(billboard);
+				thisRent.setVendor(vendor);
+				thisRent.setCreatedDate(Tools.getCurrentTimestamp());
+				
+				thisRent.setCreatedUser(getGenericManager().getMemberById(2L));
+				thisRent.setCreatedUser(getSessionUser().getMember());
+				thisRent.setFmYear(Tools.getCostcoYearFormat(Tools.thisYear() + 1));
+				thisRent.setKind(getGenericManager().getAppPropertyById(kind.getId()));
+				thisRent.setYear(rent.getYear());
+				thisRent.setIsUpToDate(false);
+				getGenericManager().saveRent(thisRent);
+				mainObj.put("result", 0);
+			}
+			return mainObj.toString();
+
+		} catch (Exception e) {
+			System.out.println("saveRentJSON error=" + e.toString());
+		}
+		return mainObj.toString();
+	}
+
+	public String billboardRentJSON() {
+
+		JSONObject mainObj = new JSONObject();
+		try {
+
+			List<BillboardRent> ls = getGenericManager().getBillboardRentList();
+
+			JSONArray ja = new JSONArray();
+
+			for (int i = 0; i < ls.size(); i++) {
+				try {
+					BillboardRent r = ls.get(i);
+					JSONObject jo = new JSONObject();
+					jo.put("r", r.getId());
+					jo.put("store", r.getBillboard().getStore().getName());
+					jo.put("billboardNo", r.getBillboard().getNo());
+
+					jo.put("size", r.getBillboard().getSize().getValueTw());
+					jo.put("size1", r.getBillboard().getSize().getCode1());
+					jo.put("size2", r.getBillboard().getSize().getCode2());
+					jo.put("size3", r.getBillboard().getSize().getCode3());
+					jo.put("size4", r.getBillboard().getSize().getCode4());
+					jo.put("vendorNo", r.getVendor() != null ? r.getVendor().getNo() : "");
+					jo.put("vendor", r.getVendor() != null ? r.getVendor().getName() : "");
+					jo.put("kind", r.getVendor() != null ? r.getKind() : "未指定位置");
+					jo.put("fmYear", r.getVendor() != null ? r.getFmYear() : "");
+					jo.put("memo", r.getRent() != null ? r.getRent().getMemo() != null ? r.getRent().getMemo() : "" : "");
+					jo.put("assign", r.getRent() != null ? r.getRent().getAssign() != null ? r.getRent().getAssign() ? "Y" : "" : "" : "");
+					ja.put(jo);
+				} catch (Exception ex) {
+					System.out.println("billboardRentJSON error=" + ex.toString());
+				}
+			}
+			mainObj.put("total", ls.size());
+			mainObj.put("rows", ja);
+		} catch (Exception e) {
+			System.out.println("rentListJSON error=" + e.toString());
+		}
+		return mainObj.toString();
+	}
+
 }

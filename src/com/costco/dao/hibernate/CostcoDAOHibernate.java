@@ -16,6 +16,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.orm.ObjectRetrievalFailureException;
 
+import com.base.util.Tools;
 import com.base.value.AppProperty;
 import com.common.dao.hibernate.CommonDAOHibernate;
 
@@ -87,8 +88,8 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 	public List<Billboard> findAllBillboard() {
 		return getHibernateTemplate().find("from Billboard");
 	}
-	
-	public List<Billboard> findAllBillboard(Store store,AppProperty size) {
+
+	public List<Billboard> findAllBillboard(Store store, AppProperty size) {
 		Criteria c = getHibernateSession().createCriteria(Billboard.class);
 		c.add(Expression.eq("store", store));
 		c.add(Expression.eq("size", size));
@@ -96,6 +97,17 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 		return c.list();
 	}
 	
+	public Billboard findBillboardByStoreAndNo(Store store,int no){
+		Criteria c = getHibernateSession().createCriteria(Billboard.class);
+		c.add(Expression.eq("store", store));
+		c.add(Expression.eq("no", no));
+		List ls=c.list();
+		if(ls.isEmpty()){
+			return null;
+		}else{
+			return (Billboard)ls.get(0);
+		}
+	}
 
 	// Rent
 	public void saveRent(Rent val) {
@@ -121,12 +133,12 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 			return obj;
 	}
 
-	public Rent findRentById(int year, Store store, int no) {
+	public Rent findRentById(String fmYear, Store store, int no) {
 		Criteria c = getHibernateSession().createCriteria(Rent.class);
 		c.createCriteria("billboard", "b");
 		c.add(Expression.eq("b.store", store));
 		c.add(Expression.eq("b.no", no));
-		c.add(Expression.eq("year", year));
+		c.add(Expression.eq("fmYear", fmYear));
 		List ls = c.list();
 		if (ls.size() > 0) {
 			return (Rent) ls.get(0);
@@ -135,15 +147,10 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 		}
 	}
 
-	public List<Rent> findAllRent(int year, Store store, Vendor vendor, boolean havaPhoto) {
+	public List<Rent> findAllRent(String fmYear, Store store, Vendor vendor, boolean havaPhoto) {
 		Criteria c = getHibernateSession().createCriteria(Rent.class);
 		c.createCriteria("billboard", "b");
-
-		Integer[] years = new Integer[2];
-		years[0] = year;
-		years[1] = year - 1;
-		c.add(Restrictions.in("year", years));
-		// c.add(Restrictions.in("year", new Integer[]{2019,2018}));
+		c.add(Expression.eq("fmYear", fmYear));
 
 		c.addOrder(Order.asc("b.store"));
 		c.addOrder(Order.asc("b.no"));
@@ -165,13 +172,8 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 	public List<Rent> findSameSizeAllRent(Rent rent) {
 		Criteria c = getHibernateSession().createCriteria(Rent.class);
 		c.createCriteria("billboard", "b");
-		
-		Integer[] years = new Integer[2];
-		years[0] = rent.getYear();
-		years[1] = rent.getYear() - 1;
-		c.add(Restrictions.in("year", years));
 
-		//c.add(Restrictions.not(Expression.eq("year", rent.getYear() + 1)));
+		c.add(Expression.eq("fmYear", rent.getFmYear()));
 
 		c.add(Restrictions.not(Expression.eq("b.no", rent.getBillboard().getNo())));
 
@@ -180,11 +182,13 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 		c.addOrder(Order.asc("b.no"));
 		return c.list();
 	}
-	
+
 	public List<Rent> findSameSizeOrderAllRent(Rent rent) {
 		Criteria c = getHibernateSession().createCriteria(Rent.class);
 		c.createCriteria("billboard", "b");
-		c.add(Expression.eq("year", rent.getYear()+1));
+
+		c.add(Expression.eq("fmYear", Tools.getCostcoYearFormat(Tools.thisYear() + 1)));
+
 		c.add(Expression.eq("b.store", rent.getBillboard().getStore()));
 		c.add(Expression.eq("b.size", rent.getBillboard().getSize()));
 		c.addOrder(Order.asc("b.no"));
@@ -217,6 +221,15 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 
 	public List<Vendor> findAllVendor() {
 		return getHibernateTemplate().find("from Vendor");
+	}
+
+	// BillboardRent
+	public List<BillboardRent> findAllBillboardRent() {
+		Criteria c = getHibernateSession().createCriteria(BillboardRent.class);
+		c.createCriteria("billboard", "b");
+		c.addOrder(Order.asc("store"));
+		c.addOrder(Order.asc("b.no"));
+		return c.list();
 	}
 
 }

@@ -28,6 +28,7 @@ public class BillboardAction extends CommonActionSupport {
 	private String fileLocation2ContentType, fileLocation2FileName, removeLocation2;
 	private java.io.File fileLocation3;
 	private String fileLocation3ContentType, fileLocation3FileName, removeLocation3;
+	String fmYear;
 
 	public BillboardAction() {
 		log = LogFactory.getLog(com.costco.web.action.BillboardAction.class);
@@ -51,6 +52,14 @@ public class BillboardAction extends CommonActionSupport {
 
 	public void setSize(AppProperty size) {
 		this.size = size;
+	}
+
+	public String getFmYear() {
+		return fmYear;
+	}
+
+	public void setFmYear(String fmYear) {
+		this.fmYear = fmYear;
 	}
 
 	public void setGenericManager(CostcoManager m) {
@@ -343,15 +352,54 @@ public class BillboardAction extends CommonActionSupport {
 			} catch (Exception e) {
 			}
 
-			List<Rent> ls = getGenericManager().getRentList(Tools.thisYear(),  store, null, false);
+			List<Billboard> items = new ArrayList<Billboard>();
+			fmYear = Tools.getCostcoYearFormat(Tools.thisYear() + 1);
+			List<Rent> ls = getGenericManager().getRentList(fmYear, store, null, false);
 			for (Rent rent : ls) {
-				JSONObject jo = new JSONObject();
-				jo.put("value", rent.getBillboard().getId());
-				jo.put("text", rent.getBillboard().getNo());
-				ja.put(jo);
+				items.add(rent.getBillboard());
 			}
+
+			List<Billboard> list = getGenericManager().getBillboardList(store, size);
+			for (Billboard board : list) {
+				boolean r = items.contains(board);
+				if (!r) {
+					JSONObject jo = new JSONObject();
+					jo.put("value", board.getId());
+					jo.put("text", board.getNo());
+					ja.put(jo);
+				}
+			}
+
 		} catch (Exception e) {
 			System.out.println("storeSizeJSON=" + e.toString());
+		}
+		return ja.toString();
+	}
+
+	public String storeSizeAllJSON() {
+		System.out.println("storeSizeAllJSON");
+		JSONArray ja = new JSONArray();
+		try {
+			try {
+				store = getGenericManager().getStoreById(store.getId());
+			} catch (Exception e) {
+			}
+
+			try {
+				size = getGenericManager().getAppPropertyById(size.getId());
+			} catch (Exception e) {
+			}
+
+			List<Billboard> list = getGenericManager().getBillboardList(store, size);
+			for (Billboard board : list) {
+				JSONObject jo = new JSONObject();
+				jo.put("value", board.getId());
+				jo.put("text", board.getNo());
+				ja.put(jo);
+			}
+
+		} catch (Exception e) {
+			System.out.println("storeSizeAllJSON=" + e.toString());
 		}
 		return ja.toString();
 	}

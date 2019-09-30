@@ -629,5 +629,12 @@ public class Tools {
 			os.close();
 		}
 	}
+	
+	public static String getCostcoYearFormat(int year) {
+		Calendar c = Calendar.getInstance();
+		String fmYear = "FY" + String.valueOf(year).substring(2, 4);
+		return fmYear;
+	}
+	
 
 }

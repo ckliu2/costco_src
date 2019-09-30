@@ -72,6 +72,11 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 		return getGenericDAO().findAllBillboard(store,size);
 	}
 	
+	public Billboard getBillboardByStoreAndNo(Store store,int no) {
+		return getGenericDAO().findBillboardByStoreAndNo(store,no);
+	}
+	
+	
 
 	// Rent
 	public void saveRent(Rent val) {
@@ -90,12 +95,12 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 		return getGenericDAO().findRentById(id);
 	}
 	
-	public Rent getRentById(int year, Store store,int no){
-		return getGenericDAO().findRentById(year,store,no);
+	public Rent getRentById(String fmYear, Store store,int no){
+		return getGenericDAO().findRentById(fmYear,store,no);
 	}
 
-	public List<Rent> getRentList(int year, Store store, Vendor vendor, boolean havaPhoto) {
-		return getGenericDAO().findAllRent(year, store, vendor, havaPhoto);
+	public List<Rent> getRentList(String fmYear, Store store, Vendor vendor, boolean havaPhoto) {
+		return getGenericDAO().findAllRent(fmYear, store, vendor, havaPhoto);
 	}
 	
 	public List<Rent> getSameSizeRentList(Rent rent){
@@ -127,5 +132,11 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 	public List<Vendor> getVendorList() {
 		return getGenericDAO().findAllVendor();
 	}
+	
+	//BillboardRent
+	public List<BillboardRent> getBillboardRentList()
+    {
+        return getGenericDAO().findAllBillboardRent();
+    }
 
 }

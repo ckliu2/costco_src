@@ -2,6 +2,7 @@ package com.common.web.action;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -356,6 +357,31 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 	public List getBillboardSizes() {
 		return getAppPropertyList("billboard.size");
 	}
+	
+	public List getCostcoYearList() {
+		return getAppPropertyList("costco.year");
+	}
+	
+	
+	public List getKindList() {
+		return getAppPropertyList("rent.type");
+	}
+	
+	
+	public String getCostcoThisYear() {
+		Calendar c = Calendar.getInstance();
+		String fmYear = "FY" + String.valueOf(c.get(Calendar.YEAR)+1).substring(2, 4);
+		return fmYear;
+	}
+	
+	public String getCostcoYearFormat(int year) {
+		Calendar c = Calendar.getInstance();
+		String fmYear = "FY" + String.valueOf(year).substring(2, 4);
+		return fmYear;
+	}
+	
+	
+	
 	
 	
 	

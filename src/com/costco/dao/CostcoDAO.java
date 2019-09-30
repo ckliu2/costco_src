@@ -34,6 +34,8 @@ public interface CostcoDAO extends CommonDAO {
 	
 	public abstract List<Billboard> findAllBillboard(Store store,AppProperty size);
 	
+	public abstract Billboard findBillboardByStoreAndNo(Store store,int no);
+	
 
 	// Vendor
 	public abstract void saveVendor(Vendor val);
@@ -55,11 +57,14 @@ public interface CostcoDAO extends CommonDAO {
 
 	public abstract Rent findRentById(Long id);
 	
-	public abstract Rent findRentById(int year, Store store,int no);
+	public abstract Rent findRentById(String fmYear, Store store,int no);
 
-	public abstract List<Rent> findAllRent(int year, Store store, Vendor vendor, boolean havaPhoto);
+	public abstract List<Rent> findAllRent(String fmYear, Store store, Vendor vendor, boolean havaPhoto);
 	
 	public abstract List<Rent> findSameSizeAllRent(Rent rent);
 	
 	public abstract List<Rent> findSameSizeOrderAllRent(Rent rent);
+	
+	//BillboardRent
+	public abstract List<BillboardRent> findAllBillboardRent();
 }

@@ -26,6 +26,8 @@ public interface CostcoManager extends CommonManager {
 	public abstract void removeBillboard(Long id);
 
 	public abstract Billboard getBillboardById(Long id);
+	
+	public abstract Billboard getBillboardByStoreAndNo(Store store,int no);
 
 	public abstract List<Billboard> getBillboardList(Store store);
 
@@ -42,9 +44,11 @@ public interface CostcoManager extends CommonManager {
 
 	public abstract Rent getRentById(Long id);
 	
-	public abstract Rent getRentById(int year, Store store,int no);
+	public abstract Rent getRentById(String fmYear, Store store,int no);
 
-	public abstract List<Rent> getRentList(int year, Store store, Vendor vendor, boolean havaPhoto);
+	public abstract List<Rent> getRentList(String fmYear, Store store, Vendor vendor, boolean havaPhoto);
+	
+	
 	
 	public abstract List<Rent> getSameSizeRentList(Rent rent);
 	
@@ -60,4 +64,7 @@ public interface CostcoManager extends CommonManager {
 	public abstract Vendor getVendorById(Long id);
 
 	public abstract List<Vendor> getVendorList();
+	
+	//BillboardRent
+	public abstract List<BillboardRent> getBillboardRentList();
 }

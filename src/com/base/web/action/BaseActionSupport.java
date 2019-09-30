@@ -508,12 +508,7 @@ public abstract class BaseActionSupport extends ActionSupport {
 		return al;
 	}
 	
-	public List getCostcoYearList() {
-		ArrayList al = new ArrayList();
-		al.add(new NameValue(2019, "FY19"));
-		al.add(new NameValue(2020, "FY20"));
-		return al;
-	}
+	
 
 	public List getLanguageList() {
 		return getAppPropertyList("common.languages");

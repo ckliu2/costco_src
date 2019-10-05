@@ -47,6 +47,8 @@ public interface CostcoDAO extends CommonDAO {
 	public abstract Vendor findVendorById(Long id);
 
 	public abstract List<Vendor> findAllVendor();
+	
+	
 
 	// Rent
 	public abstract void saveRent(Rent val);
@@ -67,4 +69,10 @@ public interface CostcoDAO extends CommonDAO {
 	
 	//BillboardRent
 	public abstract List<BillboardRent> findAllBillboardRent();
+	
+	public abstract List<VendorPrice> findAllVendorPrice();
+	
+	public abstract VendorPrice findVendorPriceById(Long id);
+	
+	
 }

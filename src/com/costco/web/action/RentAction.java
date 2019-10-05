@@ -7,8 +7,10 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.*;
 import com.common.web.action.CommonActionSupport;
+import com.base.util.MyProperties;
 import com.base.util.Tools;
 import com.base.value.*;
 
@@ -29,8 +31,9 @@ public class RentAction extends CommonActionSupport {
 	Billboard billboard;
 	boolean havaPhoto;
 	AppProperty kind;
-	String assign;
-
+	String assign,ids;
+	MyProperties myProperties;
+	
 	public RentAction() {
 		log = LogFactory.getLog(com.costco.web.action.RentAction.class);
 	}
@@ -61,6 +64,14 @@ public class RentAction extends CommonActionSupport {
 
 	public void setAssign(String assign) {
 		this.assign = assign;
+	}
+	
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
 	}
 
 	public AppProperty getKind() {
@@ -682,6 +693,69 @@ public class RentAction extends CommonActionSupport {
 		}
 		return mainObj.toString();
 	}
+	
+	
+	public String vendorReportListJSON() {
+
+		JSONObject mainObj = new JSONObject();
+		try {
+
+			List<VendorPrice> ls = getGenericManager().getVendorPriceList();
+
+			JSONArray ja = new JSONArray();
+
+			for (int i = 0; i < ls.size(); i++) {
+				try {
+					VendorPrice r = ls.get(i);
+					JSONObject jo = new JSONObject();
+					jo.put("id", r.getId());
+					jo.put("no", "["+r.getVendor().getNo()+"]");
+					jo.put("name", r.getVendor().getName());
+					jo.put("price", r.getPrice());
+					
+					ja.put(jo);
+				} catch (Exception ex) {
+					System.out.println("vendorReportListJSON error=" + ex.toString());
+				}
+			}
+			mainObj.put("total", ls.size());
+			mainObj.put("rows", ja);
+		} catch (Exception e) {
+			System.out.println("vendorReportListJSON error=" + e.toString());
+		}
+		return mainObj.toString();
+	}
+	
+	public String downloadPDFVendorReportListJSON() {
+		JSONObject mainObj = new JSONObject();
+		try {
+			myProperties = getMyProperties();
+			Tools.deleteAll(new File(myProperties.getOnlinepdfPath()));
+			
+			
+			String[] tokens = ids.split(",");
+			for (int i = 0; i < tokens.length; i++) {
+				Long id = Long.parseLong(tokens[i]);
+				VendorPrice v=getGenericManager().getVendorPriceById(id);
+				System.out.println(v.getVendorId());
+				String fileName=Tools.getURLEnecoder(v.getVendor().getNo()+"_"+v.getVendor().getName());
+				Tools.httpPost(myProperties.getPrintServer()+"rpt=0&fileName=" + fileName+"&fmYear="+myProperties.getFmYear()+"&vendor="+v.getVendorId());
+			}
+			
+			Tools.zip(myProperties.getOnlinepdfPath(), myProperties.getVendorOrderPath(), false, "");
+			
+			mainObj.put("result", true);
+
+
+		} catch (Exception e) {
+			System.out.println("constructionFeeMasterExcelJSON error=" + e.toString());
+
+		}
+		
+		return mainObj.toString();
+	}
+	
+
 
 	public String billboardRentJSON() {
 
@@ -705,7 +779,7 @@ public class RentAction extends CommonActionSupport {
 					jo.put("size2", r.getBillboard().getSize().getCode2());
 					jo.put("size3", r.getBillboard().getSize().getCode3());
 					jo.put("size4", r.getBillboard().getSize().getCode4());
-					jo.put("vendorNo", r.getVendor() != null ? r.getVendor().getNo() : "");
+					jo.put("vendorNo", r.getVendor() != null ? "["+r.getVendor().getNo()+"]" : "");
 					jo.put("vendor", r.getVendor() != null ? r.getVendor().getName() : "");
 					jo.put("kind", r.getVendor() != null ? r.getKind() : "未指定位置");
 					jo.put("fmYear", r.getVendor() != null ? r.getFmYear() : "");

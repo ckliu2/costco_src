@@ -27,6 +27,42 @@ public class MyProperties {
 	String guidLink1;
 
 	String limitHeight;
+	
+	String onlinepdfPath;
+	
+	String fmYear,printServer,vendorOrderPath;
+
+	public String getVendorOrderPath() {
+		return vendorOrderPath;
+	}
+
+	public void setVendorOrderPath(String vendorOrderPath) {
+		this.vendorOrderPath = vendorOrderPath;
+	}
+
+	public String getFmYear() {
+		return fmYear;
+	}
+
+	public void setFmYear(String fmYear) {
+		this.fmYear = fmYear;
+	}
+
+	public String getPrintServer() {
+		return printServer;
+	}
+
+	public void setPrintServer(String printServer) {
+		this.printServer = printServer;
+	}
+
+	public String getOnlinepdfPath() {
+		return onlinepdfPath;
+	}
+
+	public void setOnlinepdfPath(String onlinepdfPath) {
+		this.onlinepdfPath = onlinepdfPath;
+	}
 
 	public String getRedoPath() {
 		return redoPath;

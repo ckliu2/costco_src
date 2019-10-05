@@ -222,6 +222,8 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 	public List<Vendor> findAllVendor() {
 		return getHibernateTemplate().find("from Vendor");
 	}
+	
+	
 
 	// BillboardRent
 	public List<BillboardRent> findAllBillboardRent() {
@@ -231,5 +233,20 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 		c.addOrder(Order.asc("b.no"));
 		return c.list();
 	}
+	
+	public List<VendorPrice> findAllVendorPrice() {
+		return getHibernateTemplate().find("from VendorPrice");
+	}
+	
+	public VendorPrice findVendorPriceById(Long id){
+		if (id == null)
+			return null;
+		VendorPrice obj = (VendorPrice) getHibernateTemplate().get(VendorPrice.class, id);
+		if (obj == null)
+			throw new ObjectRetrievalFailureException(VendorPrice.class, id);
+		else
+			return obj;
+	}
+	
 
 }

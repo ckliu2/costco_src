@@ -33,6 +33,10 @@ public class Store extends BaseObject implements Serializable {
 
     /** nullable persistent field */
     private Date createdDate;
+    
+
+
+	String no;
 
     /** default constructor */
     public Store() {
@@ -46,6 +50,14 @@ public class Store extends BaseObject implements Serializable {
 		this.id = id;
 	}
 
+    public String getNo() {
+		return no;
+	}
+
+	public void setNo(String no) {
+		this.no = no;
+	}
+	
     /** minimal constructor */
     public Store(String name) {
         this.name = name;

@@ -5,6 +5,7 @@ import static org.apache.commons.io.FileUtils.copyURLToFile;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -420,6 +421,9 @@ public class Tools {
 	}
 
 	public static String zip(String src, String dest, boolean isCreateDir, String passwd) {
+		File destFile = new File(dest);
+		destFile.delete();
+		
 		File srcFile = new File(src);
 		dest = buildDestinationZipFilePath(srcFile, dest);
 		ZipParameters parameters = new ZipParameters();
@@ -629,6 +633,38 @@ public class Tools {
 			os.close();
 		}
 	}
+	
+	public static void deleteAll(File path) {
+		try {
+			File[] files = path.listFiles();
+			for (int i = 0; i < files.length; i++) {
+				files[i].delete();
+			}
+		} catch (Exception e) {
+			System.out.println("deleteAll err=" + e.toString());
+		}
+	}
+	
+	public static int httpPost(String seriveUrl) {
+		try {
+			URL url = new URL(seriveUrl);
+			HttpURLConnection httpurlconnection = (HttpURLConnection) url.openConnection();
+			httpurlconnection.setDoOutput(true);
+			httpurlconnection.setRequestMethod("POST");
+			httpurlconnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			//httpurlconnection.setRequestProperty("Content-Length", String.valueOf(urlParameters.length()));
+			//httpurlconnection.getOutputStream().write(urlParameters.getBytes(StandardCharsets.UTF_8));
+			httpurlconnection.getOutputStream().flush();
+			httpurlconnection.getOutputStream().close();
+			int code = httpurlconnection.getResponseCode();
+			System.out.println("code=" + code);
+			return code;
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			return -1;
+		}
+	}
+
 	
 	public static String getCostcoYearFormat(int year) {
 		Calendar c = Calendar.getInstance();

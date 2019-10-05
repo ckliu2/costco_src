@@ -133,10 +133,21 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 		return getGenericDAO().findAllVendor();
 	}
 	
+	
+	
 	//BillboardRent
 	public List<BillboardRent> getBillboardRentList()
     {
         return getGenericDAO().findAllBillboardRent();
     }
+	
+	//VendorPrice
+	public List<VendorPrice> getVendorPriceList(){
+		return getGenericDAO().findAllVendorPrice();
+	}
+	
+	public VendorPrice getVendorPriceById(Long id){
+		return getGenericDAO().findVendorPriceById(id);
+	}
 
 }

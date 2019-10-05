@@ -27,9 +27,10 @@ public class AppProperty extends BaseObject implements Serializable {
     /** nullable persistent field */
     private String valueUs;
 
-    String code,code1,code2,code3,code4;
-    
-    
+	String code,code1,code2,code3,code4,memo;
+
+	Integer price;
+
 	/** full constructor */
     public AppProperty(Integer seqNo, String kind, String subKind, String valueTw, String valueUs) {
         this.seqNo = seqNo;
@@ -57,6 +58,22 @@ public class AppProperty extends BaseObject implements Serializable {
         this.id = id;
     }
 
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+	
     public Integer getSeqNo() {
         return this.seqNo;
     }

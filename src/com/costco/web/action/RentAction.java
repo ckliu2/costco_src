@@ -761,11 +761,9 @@ public class RentAction extends CommonActionSupport {
 
 		JSONObject mainObj = new JSONObject();
 		try {
-
-			List<BillboardRent> ls = getGenericManager().getBillboardRentList();
-
+			getGenericManager().executeSQL(" dbo.billboardRentGen ");
+			List<BillboardRent> ls = getGenericManager().getBillboardRentList(fmYear);
 			JSONArray ja = new JSONArray();
-
 			for (int i = 0; i < ls.size(); i++) {
 				try {
 					BillboardRent r = ls.get(i);
@@ -773,7 +771,7 @@ public class RentAction extends CommonActionSupport {
 					jo.put("r", r.getId());
 					jo.put("store", r.getBillboard().getStore().getName());
 					jo.put("billboardNo", r.getBillboard().getNo());
-
+					jo.put("billboard", r.getBillboard().getId());
 					jo.put("size", r.getBillboard().getSize().getValueTw());
 					jo.put("size1", r.getBillboard().getSize().getCode1());
 					jo.put("size2", r.getBillboard().getSize().getCode2());
@@ -782,7 +780,7 @@ public class RentAction extends CommonActionSupport {
 					jo.put("vendorNo", r.getVendor() != null ? "["+r.getVendor().getNo()+"]" : "");
 					jo.put("vendor", r.getVendor() != null ? r.getVendor().getName() : "");
 					jo.put("kind", r.getVendor() != null ? r.getKind() : "未指定位置");
-					jo.put("fmYear", r.getVendor() != null ? r.getFmYear() : "");
+					jo.put("fmYear", r.getFmYear());
 					jo.put("memo", r.getRent() != null ? r.getRent().getMemo() != null ? r.getRent().getMemo() : "" : "");
 					jo.put("assign", r.getRent() != null ? r.getRent().getAssign() != null ? r.getRent().getAssign() ? "Y" : "" : "" : "");
 					ja.put(jo);

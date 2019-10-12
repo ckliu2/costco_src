@@ -136,9 +136,9 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 	
 	
 	//BillboardRent
-	public List<BillboardRent> getBillboardRentList()
+	public List<BillboardRent> getBillboardRentList(String fmYear)
     {
-        return getGenericDAO().findAllBillboardRent();
+        return getGenericDAO().findAllBillboardRent(fmYear);
     }
 	
 	//VendorPrice

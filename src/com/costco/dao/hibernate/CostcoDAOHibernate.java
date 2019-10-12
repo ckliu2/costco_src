@@ -226,9 +226,10 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 	
 
 	// BillboardRent
-	public List<BillboardRent> findAllBillboardRent() {
+	public List<BillboardRent> findAllBillboardRent(String fmYear) {
 		Criteria c = getHibernateSession().createCriteria(BillboardRent.class);
 		c.createCriteria("billboard", "b");
+		c.add(Expression.eq("fmYear", fmYear));
 		c.addOrder(Order.asc("store"));
 		c.addOrder(Order.asc("b.no"));
 		return c.list();

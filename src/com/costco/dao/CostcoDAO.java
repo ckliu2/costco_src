@@ -68,7 +68,7 @@ public interface CostcoDAO extends CommonDAO {
 	public abstract List<Rent> findSameSizeOrderAllRent(Rent rent);
 	
 	//BillboardRent
-	public abstract List<BillboardRent> findAllBillboardRent();
+	public abstract List<BillboardRent> findAllBillboardRent(String fmYear);
 	
 	public abstract List<VendorPrice> findAllVendorPrice();
 	

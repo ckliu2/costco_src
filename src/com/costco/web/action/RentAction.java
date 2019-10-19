@@ -31,9 +31,9 @@ public class RentAction extends CommonActionSupport {
 	Billboard billboard;
 	boolean havaPhoto;
 	AppProperty kind;
-	String assign,ids;
+	String assign, ids;
 	MyProperties myProperties;
-	
+
 	public RentAction() {
 		log = LogFactory.getLog(com.costco.web.action.RentAction.class);
 	}
@@ -65,7 +65,7 @@ public class RentAction extends CommonActionSupport {
 	public void setAssign(String assign) {
 		this.assign = assign;
 	}
-	
+
 	public String getIds() {
 		return ids;
 	}
@@ -422,14 +422,14 @@ public class RentAction extends CommonActionSupport {
 						ja.put(jo);
 					}
 				} catch (Exception ex) {
-					System.out.println("rentListJSON error=" + ex.toString());
+					System.out.println("changeRentJSON error=" + ex.toString());
 				}
 			}
 
 			mainObj.put("total", ls.size());
 			mainObj.put("rows", ja);
 		} catch (Exception e) {
-			System.out.println("rentListJSON error=" + e.toString());
+			System.out.println("changeRentJSON error=" + e.toString());
 		}
 		return mainObj.toString();
 	}
@@ -534,6 +534,7 @@ public class RentAction extends CommonActionSupport {
 			jo.put("vendor", rent.getVendorId());
 			jo.put("kind", rent.getKindId());
 			jo.put("year", rent.getYear());
+			jo.put("fmYear", rent.getFmYear());
 		} catch (Exception e) {
 			System.out.println("editRentJSON error=" + e.toString());
 		}
@@ -634,7 +635,8 @@ public class RentAction extends CommonActionSupport {
 		try {
 			store = getGenericManager().getStoreById(store.getId());
 			billboard = getGenericManager().getBillboardById(billboard.getId());
-			Rent rent1 = getGenericManager().getRentById(Tools.getCostcoYearFormat(Tools.thisYear() + 1), billboard.getStore(), billboard.getNo());
+			Rent rent1 = getGenericManager().getRentById(fmYear, billboard.getStore(), billboard.getNo());
+
 			vendor = getGenericManager().getVendorById(vendor.getId());
 			Rent thisRent = getGenericManager().getRentById(rent.getId());
 
@@ -659,10 +661,12 @@ public class RentAction extends CommonActionSupport {
 				r.setBillboard(billboard);
 				r.setVendor(vendor);
 				r.setCreatedDate(Tools.getCurrentTimestamp());
-				
+
 				r.setCreatedUser(getGenericManager().getMemberById(2L));
 				r.setCreatedUser(getSessionUser().getMember());
-				r.setFmYear(Tools.getCostcoYearFormat(Tools.thisYear() + 1));
+
+				r.setFmYear(fmYear);
+
 				r.setKind(getGenericManager().getAppPropertyById(kind.getId()));
 				r.setYear(rent.getYear());
 				r.setIsUpToDate(false);
@@ -676,10 +680,12 @@ public class RentAction extends CommonActionSupport {
 				thisRent.setBillboard(billboard);
 				thisRent.setVendor(vendor);
 				thisRent.setCreatedDate(Tools.getCurrentTimestamp());
-				
+
 				thisRent.setCreatedUser(getGenericManager().getMemberById(2L));
 				thisRent.setCreatedUser(getSessionUser().getMember());
-				thisRent.setFmYear(Tools.getCostcoYearFormat(Tools.thisYear() + 1));
+
+				thisRent.setFmYear(fmYear);
+
 				thisRent.setKind(getGenericManager().getAppPropertyById(kind.getId()));
 				thisRent.setYear(rent.getYear());
 				thisRent.setIsUpToDate(false);
@@ -693,8 +699,7 @@ public class RentAction extends CommonActionSupport {
 		}
 		return mainObj.toString();
 	}
-	
-	
+
 	public String vendorReportListJSON() {
 
 		JSONObject mainObj = new JSONObject();
@@ -709,10 +714,10 @@ public class RentAction extends CommonActionSupport {
 					VendorPrice r = ls.get(i);
 					JSONObject jo = new JSONObject();
 					jo.put("id", r.getId());
-					jo.put("no", "["+r.getVendor().getNo()+"]");
+					jo.put("no", "[" + r.getVendor().getNo() + "]");
 					jo.put("name", r.getVendor().getName());
 					jo.put("price", r.getPrice());
-					
+
 					ja.put(jo);
 				} catch (Exception ex) {
 					System.out.println("vendorReportListJSON error=" + ex.toString());
@@ -725,37 +730,101 @@ public class RentAction extends CommonActionSupport {
 		}
 		return mainObj.toString();
 	}
-	
+
+	public String vendorExcelJSON() {
+		JSONObject mainObj = new JSONObject();
+		try {
+			myProperties = getMyProperties();
+			String outFile = myProperties.getVendorExcelPath();
+			System.out.println("fmYear=" + fmYear + "--outFile=" + outFile);
+
+			jxl.write.WritableWorkbook workbook = jxl.Workbook.createWorkbook(new File(outFile));
+
+			List<Vendor> vendors = getGenericManager().getVendorListByRent(fmYear);
+			int i = 0;
+			for (Vendor vendor : vendors) {
+				System.out.println("vendor.no=" + vendor.getNo());
+				jxl.write.WritableSheet sheet = workbook.createSheet(vendor.getNo(), i);
+
+				// 產生基本欄位
+				jxl.write.WritableFont wf = new jxl.write.WritableFont(jxl.write.WritableFont.TIMES, 10, jxl.write.WritableFont.NO_BOLD, false);
+				jxl.write.WritableCellFormat wcfF = new jxl.write.WritableCellFormat(wf);
+				sheet.addCell(new jxl.write.Label(0, 0, "店別", wcfF));
+				sheet.addCell(new jxl.write.Label(1, 0, "燈箱編號", wcfF));
+				sheet.addCell(new jxl.write.Label(2, 0, "燈箱名稱", wcfF));
+				sheet.addCell(new jxl.write.Label(3, 0, "燈箱代碼", wcfF));
+				sheet.addCell(new jxl.write.Label(4, 0, "燈箱俗稱", wcfF));
+				sheet.addCell(new jxl.write.Label(5, 0, "客戶統稱", wcfF));
+				sheet.addCell(new jxl.write.Label(6, 0, "燈箱尺寸", wcfF));
+				sheet.addCell(new jxl.write.Label(7, 0, "客戶編號", wcfF));
+				sheet.addCell(new jxl.write.Label(8, 0, "客戶", wcfF));
+				sheet.addCell(new jxl.write.Label(9, 0, "上架年份", wcfF));
+				sheet.addCell(new jxl.write.Label(10, 0, "製作年份", wcfF));
+				sheet.addCell(new jxl.write.Label(11, 0, "備註1", wcfF));
+				sheet.addCell(new jxl.write.Label(12, 0, "備註2", wcfF));
+				sheet.addCell(new jxl.write.Label(13, 0, "指定", wcfF));
+
+				int n = 0;
+				List<Rent> ls = getGenericManager().getRentList(fmYear, null, vendor, havaPhoto);
+				for (Rent rent : ls) {
+					System.out.println("rent.id=" + rent.getId());
+
+					sheet.addCell(new jxl.write.Label(0, n + 1, rent.getBillboard().getStore().getName()));
+					sheet.addCell(new jxl.write.Label(1, n + 1, String.valueOf(rent.getBillboard().getNo())));
+					sheet.addCell(new jxl.write.Label(2, n + 1, rent.getBillboard().getSize().getValueTw()));
+					sheet.addCell(new jxl.write.Label(3, n + 1, rent.getBillboard().getSize().getCode1()));
+					sheet.addCell(new jxl.write.Label(4, n + 1, rent.getBillboard().getSize().getCode2()));
+					sheet.addCell(new jxl.write.Label(5, n + 1, rent.getBillboard().getSize().getCode3()));
+					sheet.addCell(new jxl.write.Label(6, n + 1, rent.getBillboard().getSize().getCode4()));
+					sheet.addCell(new jxl.write.Label(7, n + 1, rent.getVendor().getNo()));
+					sheet.addCell(new jxl.write.Label(8, n + 1, rent.getVendor().getName()));
+					sheet.addCell(new jxl.write.Label(9, n + 1, rent.getFmYear()));
+					sheet.addCell(new jxl.write.Number(10, n + 1, rent.getYear()));
+					sheet.addCell(new jxl.write.Label(11, n + 1, rent.getKind().getValueTw()));
+					sheet.addCell(new jxl.write.Label(12, n + 1, rent.getMemo()));
+					sheet.addCell(new jxl.write.Label(13, n + 1, rent.getAssign() != null ? rent.getAssign() ? "Y" : "" : ""));
+
+					n++;
+				}
+				i++;
+			}
+			workbook.write();
+			workbook.close();
+			mainObj.put("result", true);
+
+		} catch (Exception e) {
+			System.out.println("vendorExcelJSON error=" + e.toString());
+		}
+
+		return mainObj.toString();
+	}
+
 	public String downloadPDFVendorReportListJSON() {
 		JSONObject mainObj = new JSONObject();
 		try {
 			myProperties = getMyProperties();
 			Tools.deleteAll(new File(myProperties.getOnlinepdfPath()));
-			
-			
+
 			String[] tokens = ids.split(",");
 			for (int i = 0; i < tokens.length; i++) {
 				Long id = Long.parseLong(tokens[i]);
-				VendorPrice v=getGenericManager().getVendorPriceById(id);
+				VendorPrice v = getGenericManager().getVendorPriceById(id);
 				System.out.println(v.getVendorId());
-				String fileName=Tools.getURLEnecoder(v.getVendor().getNo()+"_"+v.getVendor().getName());
-				Tools.httpPost(myProperties.getPrintServer()+"rpt=0&fileName=" + fileName+"&fmYear="+myProperties.getFmYear()+"&vendor="+v.getVendorId());
+				String fileName = Tools.getURLEnecoder(v.getVendor().getNo());
+				Tools.httpPost(myProperties.getPrintServer() + "rpt=0&fileName=" + fileName + "&fmYear=" + myProperties.getFmYear() + "&vendor=" + v.getVendorId());
 			}
-			
-			Tools.zip(myProperties.getOnlinepdfPath(), myProperties.getVendorOrderPath(), false, "");
-			
-			mainObj.put("result", true);
 
+			Tools.zip(myProperties.getOnlinepdfPath(), myProperties.getVendorOrderPath(), false, "");
+
+			mainObj.put("result", true);
 
 		} catch (Exception e) {
 			System.out.println("constructionFeeMasterExcelJSON error=" + e.toString());
 
 		}
-		
+
 		return mainObj.toString();
 	}
-	
-
 
 	public String billboardRentJSON() {
 
@@ -777,10 +846,11 @@ public class RentAction extends CommonActionSupport {
 					jo.put("size2", r.getBillboard().getSize().getCode2());
 					jo.put("size3", r.getBillboard().getSize().getCode3());
 					jo.put("size4", r.getBillboard().getSize().getCode4());
-					jo.put("vendorNo", r.getVendor() != null ? "["+r.getVendor().getNo()+"]" : "");
+					jo.put("vendorNo", r.getVendor() != null ? "[" + r.getVendor().getNo() + "]" : "");
 					jo.put("vendor", r.getVendor() != null ? r.getVendor().getName() : "");
 					jo.put("kind", r.getVendor() != null ? r.getKind() : "未指定位置");
 					jo.put("fmYear", r.getFmYear());
+					jo.put("year", r.getRent() != null ? r.getRent().getYear() : "");
 					jo.put("memo", r.getRent() != null ? r.getRent().getMemo() != null ? r.getRent().getMemo() : "" : "");
 					jo.put("assign", r.getRent() != null ? r.getRent().getAssign() != null ? r.getRent().getAssign() ? "Y" : "" : "" : "");
 					ja.put(jo);

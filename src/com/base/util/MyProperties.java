@@ -30,7 +30,15 @@ public class MyProperties {
 	
 	String onlinepdfPath;
 	
-	String fmYear,printServer,vendorOrderPath;
+	String fmYear,printServer,vendorOrderPath,vendorExcelPath;
+
+	public String getVendorExcelPath() {
+		return vendorExcelPath;
+	}
+
+	public void setVendorExcelPath(String vendorExcelPath) {
+		this.vendorExcelPath = vendorExcelPath;
+	}
 
 	public String getVendorOrderPath() {
 		return vendorOrderPath;

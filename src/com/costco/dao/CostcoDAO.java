@@ -48,6 +48,7 @@ public interface CostcoDAO extends CommonDAO {
 
 	public abstract List<Vendor> findAllVendor();
 	
+	public abstract List<Vendor> findAllVendorByRent(String fmYear);
 	
 
 	// Rent

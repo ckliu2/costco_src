@@ -65,7 +65,7 @@ public interface CostcoManager extends CommonManager {
 
 	public abstract List<Vendor> getVendorList();
 	
-	
+	public abstract List<Vendor> getVendorListByRent(String fmYear);
 	
 	//BillboardRent
 	public abstract List<BillboardRent> getBillboardRentList(String fmYear);

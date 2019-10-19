@@ -223,7 +223,25 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 		return getHibernateTemplate().find("from Vendor");
 	}
 	
-	
+	public List<Vendor> findAllVendorByRent(String fmYear){
+		Criteria c = getHibernateSession().createCriteria(Rent.class);
+		c.createCriteria("vendor", "v");
+		c.add(Expression.eq("fmYear", fmYear));
+		
+		ProjectionList projList = Projections.projectionList();
+		projList.add(Projections.property("vendor"));
+		c.setProjection(Projections.distinct(projList));
+		c.addOrder(Order.asc("vendor"));
+		
+		List ls = c.list();
+		List<Vendor> al = new ArrayList<Vendor>();
+		for (int i = 0; i < ls.size(); i++) {
+			Vendor vendor = (Vendor) ls.get(i);
+			al.add(vendor);
+		}
+		return al;
+		
+	}
 
 	// BillboardRent
 	public List<BillboardRent> findAllBillboardRent(String fmYear) {

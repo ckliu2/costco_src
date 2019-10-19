@@ -154,7 +154,7 @@ public class VendorAction extends CommonActionSupport
 			for (Vendor vendor : ls) {
 				JSONObject jo = new JSONObject();
 				jo.put("value", vendor.getId());
-				jo.put("text", vendor.getName());
+				jo.put("text", vendor.getNo()+"-"+vendor.getName());
 				ja.put(jo);
 			}
 		} catch (Exception e) {

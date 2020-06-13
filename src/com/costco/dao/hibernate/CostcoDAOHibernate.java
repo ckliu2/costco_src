@@ -82,6 +82,7 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 		if (store != null) {
 			c.add(Expression.eq("store", store));
 		}
+		c.addOrder(Order.asc("no"));
 		return c.list();
 	}
 

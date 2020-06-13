@@ -61,8 +61,8 @@ public class Rent extends BaseObject implements Serializable {
 	String fmYear;
 	private AppProperty kind;
 	private Long kindId;
-
-	Boolean assign;
+ 
+	Boolean assign,isEdited;
 	String memo;
 
 	/** full constructor */
@@ -317,6 +317,14 @@ public class Rent extends BaseObject implements Serializable {
 
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+	
+	public Boolean getIsEdited() {
+		return isEdited;
+	}
+
+	public void setIsEdited(Boolean isEdited) {
+		this.isEdited = isEdited;
 	}
 
 	public String toString() {

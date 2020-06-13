@@ -390,7 +390,7 @@ public class BillboardAction extends CommonActionSupport {
 			} catch (Exception e) {
 			}
 
-			List<Billboard> list = getGenericManager().getBillboardList(store, size);
+			List<Billboard> list = getGenericManager().getBillboardList(store);
 			for (Billboard board : list) {
 				JSONObject jo = new JSONObject();
 				jo.put("value", board.getId());

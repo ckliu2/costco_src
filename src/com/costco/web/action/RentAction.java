@@ -434,6 +434,23 @@ public class RentAction extends CommonActionSupport {
 		return mainObj.toString();
 	}
 
+	public String noBySizeJSON() { 
+		JSONObject mainObj = new JSONObject();
+		try {
+			billboard = getGenericManager().getBillboardById(billboard.getId());
+			mainObj.put("no", billboard.getNo());
+			mainObj.put("size", billboard.getSize().getValueTw()); 
+			mainObj.put("size1", billboard.getSize().getCode1());
+			mainObj.put("size2", billboard.getSize().getCode3());
+			mainObj.put("size4", billboard.getSize().getCode4());
+			mainObj.put("sizeId", billboard.getSizeId()); 
+			
+		} catch (Exception e) {
+			System.out.println("noBySizeJSON error=" + e.toString());
+		}
+		return mainObj.toString();
+	}
+
 	public String rentListJSON() {
 
 		JSONObject mainObj = new JSONObject();
@@ -458,9 +475,9 @@ public class RentAction extends CommonActionSupport {
 					rent = ls.get(i);
 					JSONObject jo = new JSONObject();
 					jo.put("id", rent.getId());
-					jo.put("vendor", rent.getVendor().getName());
-					jo.put("vendorDeptNo", rent.getVendor().getDeptNo());
-					jo.put("vendorNo", rent.getVendor().getNo());
+					jo.put("vendor", rent.getVendor() != null ? rent.getVendor().getName() : "--");
+					jo.put("vendorDeptNo", rent.getVendor() != null ? rent.getVendor().getDeptNo() : "--");
+					jo.put("vendorNo", rent.getVendor() != null ? rent.getVendor().getNo() : "--");
 					jo.put("year", rent.getYear());
 					jo.put("fmYear", rent.getFmYear());
 					jo.put("store", rent.getBillboard().getStore().getName());
@@ -474,6 +491,7 @@ public class RentAction extends CommonActionSupport {
 					jo.put("kind", rent.getKind() != null ? rent.getKind().getValueTw() : "");
 					jo.put("memo", rent.getMemo());
 					jo.put("assign", rent.getAssign() != null ? rent.getAssign() ? "Y" : "" : "");
+					jo.put("isEdited", rent.getIsEdited() != null ? rent.getIsEdited() ? "Y" : "N" : "N");
 					ja.put(jo);
 				} catch (Exception ex) {
 					System.out.println("rentListJSON error=" + ex.toString());
@@ -637,7 +655,13 @@ public class RentAction extends CommonActionSupport {
 			billboard = getGenericManager().getBillboardById(billboard.getId());
 			Rent rent1 = getGenericManager().getRentById(fmYear, billboard.getStore(), billboard.getNo());
 
-			vendor = getGenericManager().getVendorById(vendor.getId());
+			System.out.println("vendor.getId()=" + vendor.getId());
+			if (vendor.getId() == 0) {
+				vendor = null;
+			} else {
+				vendor = getGenericManager().getVendorById(vendor.getId());
+			}
+
 			Rent thisRent = getGenericManager().getRentById(rent.getId());
 
 			if (rent1 != null && thisRent == null) {
@@ -670,6 +694,7 @@ public class RentAction extends CommonActionSupport {
 				r.setKind(getGenericManager().getAppPropertyById(kind.getId()));
 				r.setYear(rent.getYear());
 				r.setIsUpToDate(false);
+				r.setIsEdited(true);
 				getGenericManager().saveRent(r);
 				mainObj.put("result", 0);
 			} else {
@@ -689,6 +714,7 @@ public class RentAction extends CommonActionSupport {
 				thisRent.setKind(getGenericManager().getAppPropertyById(kind.getId()));
 				thisRent.setYear(rent.getYear());
 				thisRent.setIsUpToDate(false);
+				thisRent.setIsEdited(true);
 				getGenericManager().saveRent(thisRent);
 				mainObj.put("result", 0);
 			}
@@ -861,7 +887,7 @@ public class RentAction extends CommonActionSupport {
 			mainObj.put("total", ls.size());
 			mainObj.put("rows", ja);
 		} catch (Exception e) {
-			System.out.println("rentListJSON error=" + e.toString());
+			System.out.println("billboardRentJSON error=" + e.toString());
 		}
 		return mainObj.toString();
 	}

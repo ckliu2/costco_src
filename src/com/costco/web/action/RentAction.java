@@ -475,6 +475,8 @@ public class RentAction extends CommonActionSupport {
 					rent = ls.get(i);
 					JSONObject jo = new JSONObject();
 					jo.put("id", rent.getId());
+					jo.put("storeId", rent.getBillboard().getStore() != null ? rent.getBillboard().getStoreId() : 0);
+					jo.put("vendorId", rent.getVendor() != null ? rent.getVendorId() : 0);
 					jo.put("vendor", rent.getVendor() != null ? rent.getVendor().getName() : "--");
 					jo.put("vendorDeptNo", rent.getVendor() != null ? rent.getVendor().getDeptNo() : "--");
 					jo.put("vendorNo", rent.getVendor() != null ? rent.getVendor().getNo() : "--");
@@ -492,6 +494,10 @@ public class RentAction extends CommonActionSupport {
 					jo.put("memo", rent.getMemo());
 					jo.put("assign", rent.getAssign() != null ? rent.getAssign() ? "Y" : "" : "");
 					jo.put("isEdited", rent.getIsEdited() != null ? rent.getIsEdited() ? "Y" : "N" : "N");
+					jo.put("lastModifiedUser", rent.getLastModifiedUser() != null ? rent.getLastModifiedUser().getName() : "");
+					
+					
+					
 					ja.put(jo);
 				} catch (Exception ex) {
 					System.out.println("rentListJSON error=" + ex.toString());
@@ -688,7 +694,7 @@ public class RentAction extends CommonActionSupport {
 
 				r.setCreatedUser(getGenericManager().getMemberById(2L));
 				r.setCreatedUser(getSessionUser().getMember());
-
+                r.setLastModifiedUser(getSessionUser().getMember());
 				r.setFmYear(fmYear);
 
 				r.setKind(getGenericManager().getAppPropertyById(kind.getId()));
@@ -708,7 +714,7 @@ public class RentAction extends CommonActionSupport {
 
 				thisRent.setCreatedUser(getGenericManager().getMemberById(2L));
 				thisRent.setCreatedUser(getSessionUser().getMember());
-
+				thisRent.setLastModifiedUser(getSessionUser().getMember());
 				thisRent.setFmYear(fmYear);
 
 				thisRent.setKind(getGenericManager().getAppPropertyById(kind.getId()));
@@ -742,7 +748,14 @@ public class RentAction extends CommonActionSupport {
 					jo.put("id", r.getId());
 					jo.put("no", "[" + r.getVendor().getNo() + "]");
 					jo.put("name", r.getVendor().getName());
-					jo.put("price", r.getPrice());
+					jo.put("price", r.getPrice()); 
+					jo.put("vendorId",r.getVendorId());
+					try{
+						VendorQuantity v = getGenericManager().getVendorQuantity("FY21",  r.getVendor());
+						jo.put("quantity", v.getQuantity());
+					}catch(Exception es){
+						
+					}
 
 					ja.put(jo);
 				} catch (Exception ex) {

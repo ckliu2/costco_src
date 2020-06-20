@@ -54,6 +54,7 @@ public class Vendor extends BaseObject implements Serializable {
 
     /** nullable persistent field */
     private String product5;
+     
 
     /** full constructor */
     public Vendor(String name, String address, String contact, String title, String phone, Date lastModifiedDate, Date createdDate) {
@@ -194,6 +195,8 @@ public class Vendor extends BaseObject implements Serializable {
     public void setProduct5(String product5) {
         this.product5 = product5;
     }
+    
+     
 
     public String toString() {
         return new ToStringBuilder(this)

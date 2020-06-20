@@ -38,8 +38,8 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 		su.setName(user.getName());
 		su.setIp(getClientIP());
 		su.setMember(user);
-		su.setRole(user.getGroups());		
-		su.setAdmin(Tools.checkGroup(user, "admin"));		
+		su.setRole(user.getGroups());
+		su.setAdmin(Tools.checkGroup(user, "admin"));
 		MenuService ms = new MenuService(getContextRootPath());
 
 		String menu = getMenu(su);
@@ -64,9 +64,19 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 			List<Function> ls = getGenericManager().findFunctionListByFunctionCategory(c);
 			for (int j = 0; j < ls.size(); j++) {
 				Function f = ls.get(j);
-				// System.out.println("fun="+f.getFunName());
-				menu += "<div onclick=\"javascript:menuUrl('" + f.getFunUrl() + "')\" data-options=\"iconCls:'icon-menu'\"><b>" + f.getFunName() + "</b></div> \n";
-				menu += "<div class=\"menu-sep\"></div> \n";
+
+				Iterator group = su.getRole().iterator();
+				while (group.hasNext()) {
+					Group g = (Group) group.next();
+					if (f.containGroup(g) == true) {
+
+						System.out.println("fun=" + f.getFunName());
+						menu += "<div onclick=\"javascript:menuUrl('" + f.getFunUrl() + "')\" data-options=\"iconCls:'icon-menu'\"><b>" + f.getFunName() + "</b></div> \n";
+						menu += "<div class=\"menu-sep\"></div> \n";
+
+					}
+				}
+				
 			}
 			menu += "</div> \n";
 			menu += "</div> \n";
@@ -82,7 +92,7 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 		if (cookies != null) {
 			for (int i = 0; i < cookies.length; i++) {
 				c = cookies[i];
-				//System.out.println("c.getName()="+c.getName());
+				// System.out.println("c.getName()="+c.getName());
 				if (c.getName().equals(field)) {
 					value = c.getValue();
 				}
@@ -312,8 +322,8 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 		}
 		return al;
 	}
-	
-	public Group getGroupById(String id){		
+
+	public Group getGroupById(String id) {
 		return getGenericManager().getGroupById(Long.parseLong(id));
 	}
 
@@ -324,7 +334,6 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 	public void setSubmitChecking(String submitChecking) {
 		this.submitChecking = submitChecking;
 	}
-
 
 	public List removeFromList(List mainLst, List subList) {
 		if (subList == null || mainLst == null)
@@ -346,43 +355,33 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 		MyProperties myProperties = (MyProperties) ctx.getBean("myProperties");
 		return myProperties;
 	}
-	
-	
+
 	public Date getCurrentTimestamp() {
 		return Tools.getCurrentTimestamp();
 	}
-	
 
-	
 	public List getBillboardSizes() {
 		return getAppPropertyList("billboard.size");
 	}
-	
+
 	public List getCostcoYearList() {
 		return getAppPropertyList("costco.year");
 	}
-	
-	
+
 	public List getKindList() {
 		return getAppPropertyList("rent.type");
 	}
-	
-	
+
 	public String getCostcoThisYear() {
 		Calendar c = Calendar.getInstance();
-		String fmYear = "FY" + String.valueOf(c.get(Calendar.YEAR)+1).substring(2, 4);
+		String fmYear = "FY" + String.valueOf(c.get(Calendar.YEAR) + 1).substring(2, 4);
 		return fmYear;
 	}
-	
+
 	public String getCostcoYearFormat(int year) {
 		Calendar c = Calendar.getInstance();
 		String fmYear = "FY" + String.valueOf(year).substring(2, 4);
 		return fmYear;
 	}
-	
-	
-	
-	
-	
-	
+
 }

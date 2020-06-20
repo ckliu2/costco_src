@@ -75,5 +75,8 @@ public interface CostcoDAO extends CommonDAO {
 	
 	public abstract VendorPrice findVendorPriceById(Long id);
 	
+	public abstract void saveVendorQuantity(VendorQuantity val);
+	
+    public abstract VendorQuantity findVendorQuantity(String fmYear,  Vendor vendor);
 	
 }

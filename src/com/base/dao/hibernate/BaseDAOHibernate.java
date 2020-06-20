@@ -485,23 +485,18 @@ public class BaseDAOHibernate extends HibernateDaoSupport implements BaseDAO {
 
 		for (int i = 0; i < lst.size(); i++) {
 			ff = (Function) lst.get(i);
-			// System.out.println("2可以授權使用的Menu>>"
-			// +ff.getCategory().getName()+"/Item="+ ff.getFunName() );
+			 
 			Iterator group = su.getRole().iterator();
 			while (group.hasNext()) {
 				Group g = (Group) group.next();
-				// System.out.println("1可以授權使用的Menu>>"
-				// +ff.getCategory().getName()+"/Item="+ ff.getFunName() + ">>"
-				// + g.getGroupNameCh());
+				 System.out.println(g.getGroupName()+"--"+ff.getFunName()+"  Authority="+ff.getAuthority().toString()+"--containGroup="+ff.containGroup(g) );
+					
 				if (ff.containGroup(g) == true) {
 
 					if (result.contains(ff) == false) {
-						// System.out.println("可以授權使用的Menu>>"
-						// +ff.getCategory().getName()+"/Item="+ ff.getFunName()
-						// + ">>" + g.getGroupNameCh());
+						 
 						result.add(ff);
-					}
-					// continue;
+					} 
 				}
 			}
 		}

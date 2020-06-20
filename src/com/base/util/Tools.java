@@ -647,6 +647,7 @@ public class Tools {
 	
 	public static int httpPost(String seriveUrl) {
 		try {
+			System.out.println(seriveUrl);
 			URL url = new URL(seriveUrl);
 			HttpURLConnection httpurlconnection = (HttpURLConnection) url.openConnection();
 			httpurlconnection.setDoOutput(true);

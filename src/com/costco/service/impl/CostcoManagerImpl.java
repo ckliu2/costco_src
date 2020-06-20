@@ -152,5 +152,15 @@ public class CostcoManagerImpl extends CommonManagerImpl implements CostcoManage
 	public VendorPrice getVendorPriceById(Long id){
 		return getGenericDAO().findVendorPriceById(id);
 	}
+	
+	public void saveVendorQuantity(VendorQuantity val)
+    {
+        getGenericDAO().saveVendorQuantity(val);
+    }
+	
+	public VendorQuantity getVendorQuantity(String fmYear, Vendor vendor)
+    {
+         return getGenericDAO().findVendorQuantity(fmYear,vendor);
+    }
 
 }

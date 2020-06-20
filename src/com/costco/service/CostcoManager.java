@@ -73,4 +73,7 @@ public interface CostcoManager extends CommonManager {
 	//VendorPrice
 	public abstract List<VendorPrice> getVendorPriceList();
 	public abstract VendorPrice getVendorPriceById(Long id);
+	
+	public abstract void saveVendorQuantity(VendorQuantity val);
+    public abstract VendorQuantity getVendorQuantity(String fmYear,  Vendor vendor);
 }

@@ -268,5 +268,23 @@ public class CostcoDAOHibernate extends CommonDAOHibernate implements CostcoDAO 
 			return obj;
 	}
 	
+	public void saveVendorQuantity(VendorQuantity val)
+    {
+        getHibernateTemplate().saveOrUpdate(val);
+    }
+	
+	public VendorQuantity findVendorQuantity(String fmYear,  Vendor vendor) {
+		Criteria c = getHibernateSession().createCriteria(VendorQuantity.class); 
+		c.add(Expression.eq("fmYear", fmYear));
+		c.add(Expression.eq("vendor", vendor));
+		List ls=c.list();
+		if(ls.size()>0){
+			return (VendorQuantity)ls.get(0);
+		}else{
+			return null;
+		}
+		
+	}
+	
 
 }

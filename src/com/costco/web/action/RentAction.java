@@ -441,7 +441,8 @@ public class RentAction extends CommonActionSupport {
 			mainObj.put("no", billboard.getNo());
 			mainObj.put("size", billboard.getSize().getValueTw()); 
 			mainObj.put("size1", billboard.getSize().getCode1());
-			mainObj.put("size2", billboard.getSize().getCode3());
+			mainObj.put("size2", billboard.getSize().getCode2());
+			mainObj.put("size3", billboard.getSize().getCode3());
 			mainObj.put("size4", billboard.getSize().getCode4());
 			mainObj.put("sizeId", billboard.getSizeId()); 
 			
@@ -495,6 +496,7 @@ public class RentAction extends CommonActionSupport {
 					jo.put("assign", rent.getAssign() != null ? rent.getAssign() ? "Y" : "" : "");
 					jo.put("isEdited", rent.getIsEdited() != null ? rent.getIsEdited() ? "Y" : "N" : "N");
 					jo.put("lastModifiedUser", rent.getLastModifiedUser() != null ? rent.getLastModifiedUser().getName() : "");
+					jo.put("lastModifiedDate", rent.getLastModifiedDate() != null ? Tools.dateToString1(rent.getLastModifiedDate()) : "");
 					
 					
 					
@@ -551,7 +553,8 @@ public class RentAction extends CommonActionSupport {
 			rent = getGenericManager().getRentById(rent.getId());
 			jo.put("store", rent.getBillboard().getStoreId());
 			jo.put("size", rent.getBillboard().getSizeId());
-			jo.put("no", rent.getBillboard().getId());
+			jo.put("no", rent.getBillboard().getNo());
+			jo.put("noId", rent.getBillboard().getId());
 			jo.put("memo", rent.getMemo());
 			jo.put("screen", rent.getScreen());
 			jo.put("assign", rent.getAssign());
@@ -640,6 +643,20 @@ public class RentAction extends CommonActionSupport {
 		}
 		return renew.toString();
 	}
+	
+	
+	public String rollBackRentJSON() {
+		JSONObject mainObj = new JSONObject();
+		try {
+			String sql=String.format(" dbo.RollBackRent %s,%s", store.getId(),billboard.getNo());
+			System.out.println("rollBackRentJSON store.id=" +store.getId()+"  "+billboard.getNo()+"  "+sql);
+			getGenericManager().executeSQL(sql);
+			mainObj.put("result", true);
+		} catch (Exception e) {
+			System.out.println("rollBackRentJSON error=" + e.toString());
+		}
+		return mainObj.toString();
+	}
 
 	public String checkRentJSON() {
 		JSONObject mainObj = new JSONObject();
@@ -691,7 +708,7 @@ public class RentAction extends CommonActionSupport {
 				r.setBillboard(billboard);
 				r.setVendor(vendor);
 				r.setCreatedDate(Tools.getCurrentTimestamp());
-
+				r.setLastModifiedDate(Tools.getCurrentTimestamp());
 				r.setCreatedUser(getGenericManager().getMemberById(2L));
 				r.setCreatedUser(getSessionUser().getMember());
                 r.setLastModifiedUser(getSessionUser().getMember());
@@ -711,7 +728,7 @@ public class RentAction extends CommonActionSupport {
 				thisRent.setBillboard(billboard);
 				thisRent.setVendor(vendor);
 				thisRent.setCreatedDate(Tools.getCurrentTimestamp());
-
+				thisRent.setLastModifiedDate(Tools.getCurrentTimestamp());
 				thisRent.setCreatedUser(getGenericManager().getMemberById(2L));
 				thisRent.setCreatedUser(getSessionUser().getMember());
 				thisRent.setLastModifiedUser(getSessionUser().getMember());

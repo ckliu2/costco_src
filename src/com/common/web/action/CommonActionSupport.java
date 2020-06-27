@@ -383,5 +383,11 @@ public abstract class CommonActionSupport extends BaseActionSupport {
 		String fmYear = "FY" + String.valueOf(year).substring(2, 4);
 		return fmYear;
 	}
+	
+	public boolean isAdminRole() {		
+		SessionUser su=getSessionUser();
+		boolean c=checkGroup(su, "ADMIN");
+	    return c;
+	}
 
 }

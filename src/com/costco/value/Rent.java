@@ -64,7 +64,7 @@ public class Rent extends BaseObject implements Serializable {
  
 	Boolean assign,isEdited;
 	String memo;
-
+	 
 	/** full constructor */
 	public Rent(Integer year, Boolean isUpToDate, Date lastModifiedDate, Date createdDate, com.costco.value.Billboard billboard, com.costco.value.Vendor vendor, UploadedFile cover, Member lastModifiedUser, Member createdUser) {
 		this.year = year;
